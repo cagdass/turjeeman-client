@@ -7,7 +7,7 @@ import {Router, hashHistory}from "react-router";
 import "whatwg-fetch";
 import "./assets/css/style.css";
 
-// import appState from "utility/appState";
+import appState from "utility/app_state";
 
 import routes from "./routes.js";
 
