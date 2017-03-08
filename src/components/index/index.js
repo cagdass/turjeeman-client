@@ -1,5 +1,7 @@
 import React from "react";
 
+import NavBar from "./navbar/navbar.js";
+
 class Index extends React.Component {
     constructor(props, context, ...args) {
         super(props, context, ...args);
@@ -10,7 +12,7 @@ class Index extends React.Component {
 
         return (
             <div>
-                Turjee man!
+                <NavBar/>
                 {children}
             </div>
         );

@@ -38,7 +38,7 @@
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "1.8.0",
     "mocha": "3.0.2",
-    "react": "15.3.0",
+    "react": "15.4.2",
     "react-addons-test-utils": "15.3.0",
     "react-dom": "15.3.0",
     "react-stub-context": "0.7.0",
@@ -50,10 +50,14 @@
     "webpack-dev-server": "1.14.1"
   },
   "dependencies": {
+    "@blueprintjs/core": "^1.11.1",
     "bluebird": "3.4.1",
     "classnames": "2.2.5",
     "lodash": "4.15.0",
     "moment": "2.14.1",
+    "react": "^15.4.2",
+    "react-addons-css-transition-group": "^15.4.2",
+    "react-dom": "^15.4.2",
     "react-loader": "2.4.0",
     "react-router": "2.6.1",
     "uuid": "2.0.2",
