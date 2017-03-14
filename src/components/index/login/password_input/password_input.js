@@ -18,6 +18,8 @@ class PasswordInput extends React.Component {
         this.setState({
             "password": value
         });
+
+        this.props.onChange(value);
     }
 
     render () {

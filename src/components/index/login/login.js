@@ -17,17 +17,32 @@ class Login extends React.Component {
         };
     }
 
+    passwordChange (password) {
+        this.setState({
+            "password": password
+        })
+    }
+
+    usernameChange (username) {
+        this.setState({
+            "username": username
+        })
+    }
+
     render () {
         let { error, formSubmitted, username, password } = this.state;
 
         return (
             <div className="login-page">
                 Login stuff
+                <hr />
+                <b>For debug:</b>
+                <pre>{`Username: ${username}\nPassword: ${password}`}</pre>
                 <div className="username-form">
-                    <UsernameInput />
+                    <UsernameInput onChange={this.usernameChange.bind(this)} />
                 </div>
                 <div className="password-form">
-                    <PasswordInput />
+                    <PasswordInput onChange={this.passwordChange.bind(this)} />
                 </div>
             </div>
         );

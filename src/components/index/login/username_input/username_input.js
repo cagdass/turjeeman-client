@@ -16,6 +16,7 @@ class UsernameInput extends React.Component {
         this.setState({
             "username": value
         });
+        this.props.onChange(value);
     }
 
     render () {
