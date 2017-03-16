@@ -1,0 +1,11 @@
+.translate-div {
+    padding: 100px;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-area {
+    padding: 20px;
+}

@@ -281,3 +281,11 @@ body {
 .padding-right-20 {
     padding-right: 20px;
 }
+
+.center-wh {
+    padding: 100px;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
