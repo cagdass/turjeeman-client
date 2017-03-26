@@ -60,6 +60,7 @@
     "react-dom": "^15.4.2",
     "react-loader": "2.4.0",
     "react-router": "2.6.1",
+    "react-select": "^1.0.0-rc.3",
     "uuid": "2.0.2",
     "whatwg-fetch": "1.0.0"
   }

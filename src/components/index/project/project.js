@@ -22,6 +22,11 @@ class Project extends React.Component {
                     <div className="text-area">
                         <TextArea className="text-area"/>
                     </div>
+                    <div>
+                        <button type="button" className="pt-button pt-intent-success" style={{width: 80}}>
+                            Save <span className="pt-icon-standard pt-icon-arrow-right pt-align-right"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         );

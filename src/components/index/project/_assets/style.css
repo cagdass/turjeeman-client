@@ -1,5 +1,5 @@
 .translate-div {
-    padding: 100px;
+    padding: 30px;
     flex-direction: row;
     display: flex;
     justify-content: center;
@@ -9,3 +9,4 @@
 .text-area {
     padding: 20px;
 }
+
