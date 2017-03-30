@@ -9,73 +9,133 @@ class TextArea extends React.Component {
         this.state = {
             "input": "",
             "selected": "",
+            "selectedIndices": [],
             "clicked": true,
             "selections": []
         };
     }
 
     handleChange (e) {
+        let { selections } = this.state;
+
+        let input = e.target.value;
+
         this.setState({
-            "input": e.target.value,
+            "input": input,
         });
+
+        this.props.onChange(input, selections);
     }
 
     handleSelect (e) {
-        console.log(document.activeElement);
-        let al = document.activeElement;
-        console.log(this.getText(al));
+        let active_element = document.activeElement;
+        let input = e.target.value;
+
+        this.getText(active_element);
+
+
         this.setState({
             "input": e.target.value,
         });
+
+        let { selections } = this.state;
+
+        this.props.onChange(input, selections);
     }
 
-    getText (elem) {
-        let selected = elem.value.substring(elem.selectionStart, elem.selectionEnd) || "";
+    getText (active_element) {
+        let selected = active_element.value.substring(active_element.selectionStart, active_element.selectionEnd) || "";
+        let start = active_element.selectionStart || 0;
+        let end =  active_element.selectionEnd || -1;
 
         this.setState({
             "selected": selected,
-        })
+            "selectedIndices": [start, end]
+        });
     }
 
-
-
     addSelection () {
-        let { selected, selections } = this.state;
+        let { selectedIndices, selected, selections } = this.state;
 
         if (selected.length > 0) {
+            let [start, end] = selectedIndices;
+            let cur_start = -1;
+            let cur_end = -1;
+            let index = -1;
 
-            let index = selections.indexOf(selected);
+            for (var i = 0; i < selections.length && index == -1; i++) {
+                [cur_start, cur_end] = selections[i];
+
+                if (cur_start === start && cur_end === end) {
+                    index = i;
+                }
+            }
 
             if (index !== -1) {
+                selections = [...selections.slice(0, index), ...selections.slice(index + 1)];
+
                 this.setState({
                     "selected": "",
-                    "selections": [...selections.slice(0, index), ...selections.slice(index + 1)],
+                    "selections": selections,
                 });
             }
             else {
+                selections = [...selections, selectedIndices];
+
                 this.setState({
                     "selected": "",
-                    "selections": [...selections, selected],
+                    "selections": selections,
                 });
             }
         }
+
+        let { input } = this.state;
+
+        this.props.onChange(input, selections);
+    }
+
+    renderMapping (mapping, index) {
+        let { input } = this.state;
+
+        if (mapping.length == 2 && input.length >= mapping[1]) {
+            let start = mapping[0];
+            let end = mapping[1];
+
+            return <span key={`${index}`}>
+                    {`${input.substring(start, end)} `}
+                </span>;
+        }
+        else {
+            console.log("returning empty span");
+            console.log(input);
+            console.log(mapping[0], mapping[1]);
+            return <span />
+        }
+
     }
 
     render () {
-        let { input, selected, selections } = this.state;
+        let { input, selected, selections, selectedIndices } = this.state;
 
         return (
             <div>
                 <pre>{`${selections[0]} ${selections.length} ${selections}`}</pre>
                 <div>
                     <div className="selection-stuff">
+                        <b>Current mappings: </b>
+                        {selections.map(this.renderMapping.bind(this))}
+                    </div>
+
+                    <div className="selection-stuff">
+                        <b>Current selection: </b>
                         {selected}
                     </div>
                     <div className="buttons-stuff">
                         <button type="button" onClick={this.addSelection.bind(this)} className="pt-button pt-intent-primary">
-                            Select
+                            Map
                         </button>
                     </div>
+                    <hr />
                     <div className="text-area-stuff">
                         <textarea id="div" type="text"
                           onChange={this.handleChange.bind(this)}
@@ -87,7 +147,6 @@ class TextArea extends React.Component {
             </div>
         );
     }
-
 }
 
 TextArea.contextTypes = {
