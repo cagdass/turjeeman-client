@@ -94,24 +94,12 @@ class TextArea extends React.Component {
         this.props.onChange(input, selections);
     }
 
-    renderMapping (mapping, index) {
-        let { input } = this.state;
-
-        if (mapping.length == 2 && input.length >= mapping[1]) {
-            let start = mapping[0];
-            let end = mapping[1];
-
-            return <span key={`${index}`}>
-                    {`${input.substring(start, end)} `}
-                </span>;
-        }
-        else {
-            console.log("returning empty span");
-            console.log(input);
-            console.log(mapping[0], mapping[1]);
-            return <span />
-        }
-
+    clearSelections () {
+        this.setState({
+            "selected": "",
+            "selectedIndices": "",
+            "selections": ""
+        })
     }
 
     render () {
@@ -121,10 +109,7 @@ class TextArea extends React.Component {
             <div>
                 <pre>{`${selections[0]} ${selections.length} ${selections}`}</pre>
                 <div>
-                    <div className="selection-stuff">
-                        <b>Current mappings: </b>
-                        {selections.map(this.renderMapping.bind(this))}
-                    </div>
+
 
                     <div className="selection-stuff">
                         <b>Current selection: </b>

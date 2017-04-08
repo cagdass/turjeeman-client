@@ -1,0 +1,36 @@
+@media screen and (max-width: 699px) and (min-width: 100px) {
+    .text-area {
+        padding: 10px;
+        width: 40em;
+        height: 500px;
+    }
+
+    .selection-stuff {
+        padding: 20px;
+        height: 50px;
+    }
+
+    .buttons-stuff {
+        padding: 20px;
+        padding-right: 20px;
+        height: 60px;
+    }
+
+    .text-area-stuff {
+        padding: 20px;
+        height: 500px;
+    }
+}
+
+
+@media screen and (max-width: 699px) and (min-width: 100px) {
+    .text-area {
+        padding: 4%;
+        width: 90%;
+        height: 500px;
+    }
+
+    .text-area-stuff {
+        padding: 2%;
+    }
+}

@@ -1,0 +1,25 @@
+.translate-div {
+    padding: 30px;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-area {
+    padding: 20px;
+}
+
+@media screen and (max-width: 699px) and (min-width: 100px) {
+    .translate-div {
+        padding: 30px;
+        flex-direction: column;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .text-area {
+        padding: 20px;
+    }
+}
