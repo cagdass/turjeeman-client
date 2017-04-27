@@ -3,6 +3,10 @@ import { Popover, PopoverInteractionKind, Position } from "@blueprintjs/core";
 
 import "./_assets/style.css";
 
+const colors = [
+    "orange", "red", "green", "blue", "yellow", "brown", "purple", "white"
+];
+
 class TextView extends React.Component {
     constructor (props, context, ...args) {
         super(props, context, ...args);
@@ -18,8 +22,9 @@ class TextView extends React.Component {
         let active_element = document.activeElement;
         let { input } = this.props;
 
-        this.getText(active_element);
+        // this.getText(active_element);
 
+        this.getSelectionHtml();
         let { selections } = this.state;
 
         this.props.onChange(input, selections);
@@ -32,6 +37,43 @@ class TextView extends React.Component {
 
         this.setState({
             "selected": selected,
+            "selectedIndices": [start, end]
+        });
+    }
+
+    getSelectionHtml() {
+        var html = "";
+        let start = -1;
+        let end = -1;
+
+        if (typeof window.getSelection != "undefined") {
+            var sel = window.getSelection();
+            console.log(sel);
+            start = sel.anchorOffset;
+            end = sel.focusOffset;
+
+            console.log(start, end);
+            console.log(sel.rangeCount);
+
+            if (sel.rangeCount) {
+                var container = document.createElement("div");
+                for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+                    console.log(i);
+                    container.appendChild(sel.getRangeAt(i).cloneContents());
+                    console.log(container);
+                }
+                html = container.innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
+            }
+        }
+        else if (typeof document.selection != "undefined") {
+            console.log("UNDEFINED");
+            if (document.selection.type == "Text") {
+                html = document.selection.createRange().htmlText;
+            }
+        }
+
+        this.setState({
+            "selected": html,
             "selectedIndices": [start, end]
         });
     }
@@ -84,16 +126,37 @@ class TextView extends React.Component {
         })
     }
 
+    pickColor (index, selections) {
+       for (let i = 0; i < selections.length; i++) {
+            if (selections[0] <= index && index < selections[1]) {
+                return colors[i % colors.length]
+            }
+        }
+    }
+
+    renderCharacter (character, index) {
+        let { selections } = this.state;
+
+        return <span key={index}
+                     style={
+                     {
+                         backgroundColor: this.pickColor.bind(this, index, selections)
+                     }
+                     }>
+            {character}
+        </span>;
+    }
+
     render () {
         let { selected, selections, selectedIndices } = this.state;
         let { input } = this.props;
 
+        let characters = input.split('') || [];
+
         return (
             <div>
-                <pre>{`${selections[0]} ${selections.length} ${selections}`}</pre>
+                <pre>{`Selections: ${selections[0]} ${selections.length} ${selections}\nInput: ${input}\nSelind ${selectedIndices}`}</pre>
                 <div>
-
-
                     <div className="selection-stuff">
                         <b>Current selection: </b>
                         {selected}
@@ -104,12 +167,13 @@ class TextView extends React.Component {
                         </button>
                     </div>
                     <hr />
-                    <div className="text-area-stuff">
-                        <textarea id="div" type="text"
-                                  value={input}
-                                  onKeyUp={this.handleSelect.bind(this)}
-                                  onKeyDown={this.handleSelect.bind(this)}
-                                  onClick={this.handleSelect.bind(this)} className="pt-input pt-fill" dir="auto"></textarea>
+                    <div className="text-area-stuff"
+                         onKeyUp={this.handleSelect.bind(this)}
+                         onKeyDown={this.handleSelect.bind(this)}
+                         onClick={this.handleSelect.bind(this)}>
+                        <div>
+                            {characters.map(this.renderCharacter.bind(this))}
+                        </div>
                     </div>
                 </div>
             </div>
