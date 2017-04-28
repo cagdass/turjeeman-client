@@ -6,7 +6,7 @@ class LoginService {
         return Promise.try(() => {
             let {password, username} = user;
             if (password === "123456" && username === "deneme") {
-                let user = {username: "Baraa", name: "DummyBaraa", surname: "Orabi"};
+                let user = {username: "Baraa", name: "Baraa", surname: "Orabi"};
                 return appState.setUser(user);
             } else {
                 throw {errorMessage: "Wrong credentials"};

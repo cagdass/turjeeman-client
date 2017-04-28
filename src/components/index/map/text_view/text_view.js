@@ -166,7 +166,7 @@ class TextView extends React.Component {
         const popoverContent = (
             <div>
                 <button className="pt-button pt-popover-dismiss"
-                        onClick={this.removeSelection.bind(this, index)}>Remove selection</button>
+                        onClick={this.removeSelection.bind(this, index)}>Remove</button>
             </div>
         );
 
@@ -181,7 +181,7 @@ class TextView extends React.Component {
                     content={popoverContent}
                     interactionKind={PopoverInteractionKind.HOVER}
                     popoverClassName="pt-popover-content-sizing"
-                    position={Position.RIGHT}
+                    position={Position.TOP}
                     >
                     <span key={index}
                           style={{backgroundColor: color}}>

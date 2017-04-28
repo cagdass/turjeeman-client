@@ -12,12 +12,13 @@ import NoMatch from "components/no_match";
 import routesService from "./routes/_services/routes_service";
 
 const routes = (
-    <Route path="/" component={Index}>
+    <Route path="/" component={Index} >
         <IndexRoute component={Home} onEnter={routesService.requireAuth} />
         <Route path="login" component={Login} onEnter={routesService.alreadyLoggedIn} />
-        <Route path="dashboard" component={Dashboard} />
-        <Route path="map" component={Map} />
-        <Route path="*" component={NoMatch} />
+        <Route path="dashboard" component={Dashboard} onEnter={routesService.requireAuth} />
+        <Route path="map" component={Map} onEnter={routesService.requireAuth} />
+        <Route path="edit" component={Edit} onEnter={routesService.requireAuth} />
+        <Route path="*" component={NoMatch} onEnter={routesService.requireAuth} />
     </Route>
 );
 

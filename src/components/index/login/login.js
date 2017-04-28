@@ -19,6 +19,22 @@ class Login extends React.Component {
         };
     }
 
+    onLogin(username, password, e) {
+        // e.preventDefault();
+        loginService.loginUser({username, password})
+            .then(() => {
+                let {location} = this.props;
+                let {router} = this.context;
+                if (location.state && location.state.nextPathname) {
+                    router.replace({pathname: '/dashboard', query: location.state.nextQuery})
+                } else {
+                    router.replace('/dashboard');
+                }
+                this.setState({error: undefined, formSubmitted: true});
+            })
+            .catch(error => this.setState({error, formSubmitted: true}))
+    }
+
     passwordChange (password) {
         this.setState({
             "password": password
@@ -50,10 +66,13 @@ class Login extends React.Component {
                     <UsernameInput onChange={this.usernameChange.bind(this)} />
                 </div>
                 <div className="password-form">
-                    <PasswordInput onChange={this.passwordChange.bind(this)} />
+                    <PasswordInput
+                        onChange={this.passwordChange.bind(this)}
+
+                    />
                 </div>
                 <div>
-                    <LoginButton clickFunction={this.onButtonClick.bind(this)} />
+                    <LoginButton clickFunction={this.onLogin.bind(this, username, password)} />
                 </div>
                 <Link to="forgot_password">Forgot password</Link>
             </div>
