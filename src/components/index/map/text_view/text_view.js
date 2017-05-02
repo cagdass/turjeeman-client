@@ -200,7 +200,7 @@ class TextView extends React.Component {
 
         return (
             <div>
-                <pre>{`Selections: ${selections[0]} ${selections.length} ${selections}\nInput: ${input}\nSelind ${selectedIndices}`}</pre>
+                {/*<pre>{`Selections: ${selections[0]} ${selections.length} ${selections}\nInput: ${input}\nSelind ${selectedIndices}`}</pre>*/}
                 <div>
                     <div className="selection-stuff">
                         <b>Current selection: </b>
@@ -212,7 +212,7 @@ class TextView extends React.Component {
                         </button>
                     </div>
                     <hr />
-                    <div className="text-area-stuff"
+                    <div className="text-area-stuff scrollable-div"
                          onKeyUp={this.handleSelect.bind(this)}
                          onKeyDown={this.handleSelect.bind(this)}
                          onClick={this.handleSelect.bind(this)}>

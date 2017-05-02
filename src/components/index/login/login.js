@@ -12,10 +12,11 @@ class Login extends React.Component {
     constructor (props, context, ...args) {
         super(props, context, ...args);
         this.state = {
-            "error": "",
+            "error": undefined,
             "formSubmitted": false,
             "username": "",
-            "password" : ""
+            "password" : "",
+            "isDirty": false,
         };
     }
 
@@ -30,20 +31,30 @@ class Login extends React.Component {
                 } else {
                     router.replace('/dashboard');
                 }
-                this.setState({error: undefined, formSubmitted: true});
+                this.setState({
+                    error: undefined,
+                    formSubmitted: true,
+                    isDirty: false
+                });
             })
-            .catch(error => this.setState({error, formSubmitted: true}))
+            .catch(error => this.setState({
+                error,
+                formSubmitted: true,
+                isDirty: false
+            }))
     }
 
     passwordChange (password) {
         this.setState({
-            "password": password
+            "password": password,
+            "isDirty": true
         })
     }
 
     usernameChange (username) {
         this.setState({
-            "username": username
+            "username": username,
+            "isDirty": true
         })
     }
 
@@ -53,27 +64,40 @@ class Login extends React.Component {
         });
     }
 
+    setDirty () {
+        this.setState({
+            "isDirty": true,
+        })
+    }
+
     render () {
-        let { error, formSubmitted, username, password } = this.state;
+        let { error, formSubmitted, username, password, isDirty } = this.state;
 
         return (
             <div className="login-page">
-                Login stuff
                 <hr />
-                <b>For debug:</b>
-                <pre>{`username: ${username}\npassword: ${password}\nformSubmitted: ${formSubmitted}`}</pre>
+                <pre>{`username: ${username}\npassword: ${password}\nformSubmitted: ${formSubmitted}\nerror: ${error}\nisDirty: ${isDirty}`}</pre>
                 <div className="username-form">
-                    <UsernameInput onChange={this.usernameChange.bind(this)} />
+                    <UsernameInput
+                        onFocus={this.setDirty.bind(this)}
+                        onChange={this.usernameChange.bind(this)}
+                        handleEnter={this.onLogin.bind(this, username, password)}
+                        showError={(error != undefined) && !isDirty}
+                    />
                 </div>
                 <div className="password-form">
                     <PasswordInput
+                        onFocus={this.setDirty.bind(this)}
                         onChange={this.passwordChange.bind(this)}
-
+                        handleEnter={this.onLogin.bind(this, username, password)}
+                        showError={(error != undefined) && !isDirty}
                     />
                 </div>
+                <br />
                 <div>
                     <LoginButton clickFunction={this.onLogin.bind(this, username, password)} />
                 </div>
+                <br />
                 <Link to="forgot_password">Forgot password</Link>
             </div>
         );

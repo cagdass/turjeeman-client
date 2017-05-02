@@ -19,12 +19,31 @@ class UsernameInput extends React.Component {
         this.props.onChange(value);
     }
 
+    handleFocus () {
+        this.props.onFocus();
+    }
+
+    keyPress (e) {
+        if (e.key == 'Enter') {
+            this.props.handleEnter();
+        }
+    }
+
     render () {
         let { username } = this.state;
+        let { showError } = this.props;
+
         return (
             <div>
                 <div className="pt-input-group">
-                    <input onChange={this.handleChange.bind(this)} type="username" className="pt-input" placeholder="Username" />
+                    <input
+                        onFocus={this.handleFocus.bind(this)}
+                        onChange={this.handleChange.bind(this)}
+                        onKeyPress={this.keyPress.bind(this)}
+                        type="username"
+                        className={"pt-input " + (showError ? 'pt-intent-danger' : '')}
+                        placeholder="Username"
+                    />
                 </div>
             </div>
         );

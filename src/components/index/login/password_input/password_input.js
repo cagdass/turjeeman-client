@@ -22,11 +22,32 @@ class PasswordInput extends React.Component {
         this.props.onChange(value);
     }
 
+    handleFocus () {
+        this.props.onFocus();
+    }
+
+    keyPress (e) {
+        if (e.key == 'Enter') {
+            this.props.handleEnter();
+        }
+    }
+
     render () {
         let { password } = this.state;
+        let { showError } = this.props;
+
+        console.log(showError);
+
         return (
             <div className="pt-input-group">
-                <input onChange={this.handleChange.bind(this)} type="password" className="pt-input" placeholder="Password" />
+                <input
+                    onChange={this.handleChange.bind(this)}
+                    onFocus={this.handleFocus.bind(this)}
+                    onKeyPress={this.keyPress.bind(this)}
+                    type="password"
+                    className={"pt-input " + (showError ? 'pt-intent-danger' : '')}
+                    placeholder="Password"
+                />
                 <button className="pt-button pt-minimal pt-intent-warning pt-icon-lock" tabIndex="-1"></button>
             </div>
         );
