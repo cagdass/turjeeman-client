@@ -1,5 +1,6 @@
 .login-page {
     height: 500px;
+    padding-top: 200px;
     flex-direction: column;
     display: flex;
     justify-content: center;

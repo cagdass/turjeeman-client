@@ -76,7 +76,6 @@ class Login extends React.Component {
         return (
             <div className="login-page">
                 <hr />
-                <pre>{`username: ${username}\npassword: ${password}\nformSubmitted: ${formSubmitted}\nerror: ${error}\nisDirty: ${isDirty}`}</pre>
                 <div className="username-form">
                     <UsernameInput
                         onFocus={this.setDirty.bind(this)}
@@ -99,6 +98,8 @@ class Login extends React.Component {
                 </div>
                 <br />
                 <Link to="forgot_password">Forgot password</Link>
+                <br />
+                <Link to="register">Register</Link>
             </div>
         );
     }

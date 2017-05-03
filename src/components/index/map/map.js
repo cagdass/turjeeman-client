@@ -94,9 +94,6 @@ class Project extends React.Component {
         return (
             <div className="center-wh">
                 <h1>Project</h1>
-                <pre>
-                    {`Input text: ${inputText}\nOutput text: ${outputText}\n`}
-                </pre>
                 {mappings.map(this.renderMappingPair.bind(this))}
                 <div className="translate-div">
                     <div className="text-area">

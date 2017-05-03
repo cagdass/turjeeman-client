@@ -5,6 +5,7 @@ import * as Blueprint from "@blueprintjs/core";
 
 import appState from "../../../utility/app_state";
 import loginService from "../login/_services/login_service";
+import "./_assets/style.css";
 
 const navbarStyle = {
     margin: "0",
@@ -62,7 +63,9 @@ class NavBar extends React.Component {
                         </Link>
                     </div>
                     <div className="pt-navbar-group pt-align-right">
-                        <button className="pt-button pt-minimal pt-icon-home" tabIndex={tabindex}>Home</button>
+                        <Link to="/dashboard">
+                            <button className="pt-button pt-minimal pt-icon-home" tabIndex={tabindex}><span className="no-highlight">Dashboard</span></button>
+                        </Link>
                         <button className="pt-button pt-minimal pt-icon-document" tabIndex={tabindex}>Files</button>
                         <span className="pt-navbar-divider" />
                         <button className="pt-button pt-minimal pt-icon-user" tabIndex={tabindex}/>
