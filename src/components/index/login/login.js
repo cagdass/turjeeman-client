@@ -73,8 +73,11 @@ class Login extends React.Component {
     render () {
         let { error, formSubmitted, username, password, isDirty } = this.state;
 
+        let visibility = ((error != undefined) && !isDirty) ? "visible" : "hidden";
+
         return (
             <div className="login-page">
+                <span style={{color: "red", visibility: visibility}}>Wrong email or password</span>
                 <hr />
                 <div className="username-form">
                     <UsernameInput

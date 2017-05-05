@@ -42,7 +42,7 @@ class UsernameInput extends React.Component {
                         onKeyPress={this.keyPress.bind(this)}
                         type="username"
                         className={"pt-input " + (showError ? 'pt-intent-danger' : '')}
-                        placeholder="Username"
+                        placeholder="Email"
                     />
                 </div>
             </div>

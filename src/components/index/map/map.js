@@ -19,8 +19,8 @@ class Project extends React.Component {
     componentDidMount () {
         // @TODO: Replace this with a backend function that'll retrieve the input/output text.
         this.setState({
-            inputText: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-            outputText: "Written Baraa Orabi but better read MAN"
+            inputText: "Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı. Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı. Bu görüntüler sosyal medyada 2 oyuncu arasında kıyaslama yapılmasına neden oldu...",
+            outputText: "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal. In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals. These images caused comparisons between 2 players in the social media ...",
         })
     }
 

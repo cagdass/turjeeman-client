@@ -5,7 +5,9 @@ import Index from "./components/index/index";
 import Login from "./components/index/login/login";
 import Register from "./components/index/register/register";
 import Dashboard from "./components/index/dashboard/dashboard";
+import MyAccount from "./components/index/my_account/my_account";
 import Map from "./components/index/map/map";
+import Sentencer from "./components/index/sentencer/sentencer";
 import Edit from "./components/index/edit/edit";
 import NoMatch from "components/no_match";
 
@@ -17,8 +19,10 @@ const routes = (
         <Route path="login" component={Login} onEnter={routesService.alreadyLoggedIn} />
         <Route path="register" component={Register} />
         <Route path="dashboard" component={Dashboard} onEnter={routesService.requireAuth} />
-        <Route path="map" component={Map} onEnter={routesService.requireAuth} />
-        <Route path="edit" component={Edit} onEnter={routesService.requireAuth} />
+        <Route path="my_account" component={MyAccount} onEnter={routesService.requireAuth} />
+        <Route path="map/:id" component={Map} onEnter={routesService.requireAuth} />
+        <Route path="sentencer/:id" component={Sentencer} onEnter={routesService.requireAuth} />
+        <Route path="edit/:id" component={Edit} onEnter={routesService.requireAuth} />
         <Route path="*" component={NoMatch} onEnter={routesService.requireAuth} />
     </Route>
 );

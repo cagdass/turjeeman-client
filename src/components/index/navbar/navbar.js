@@ -22,32 +22,29 @@ class NavBar extends React.Component {
 
     onLogout() {
         loginService.logoutUser().then(() => {
-            let {router} = this.context;
+            let { router } = this.context;
             router.replace("login");
         }).catch(error => {
-            logger.logError(error);
+            console.error(error);
             this.setState(error);
         });
     }
 
+    myAccount() {
+        let { router } = this.context;
+        router.replace("my_account");
+    }
+
     render() {
         const settingsMenu = <Menu>
-            <MenuItem
-                iconName="new-text-box"
-                text="New text box"
-            />
-            <MenuItem
-                iconName="new-object"
-                text="New object"
-            />
-            <MenuItem
-                iconName="new-link"
-                text="New link"
+            <MenuItem iconName="pt-icon-user"
+                text="My account"
+                onClick={this.myAccount.bind(this)}
             />
             <MenuDivider />
             <MenuItem text="Logout"
-                      iconName="pt-icon-log-out"
-                      onClick={this.onLogout.bind(this)}
+                iconName="pt-icon-log-out"
+                onClick={this.onLogout.bind(this)}
             />
         </Menu>;
 
@@ -58,7 +55,7 @@ class NavBar extends React.Component {
             <nav className="pt-navbar pt-dark" style={navbarStyle}>
                 <div style={navbarStyle}>
                     <div className="pt-navbar-group pt-align-left">
-                        <Link to="/">
+                        <Link to="/dashboard">
                             <div className="pt-navbar-heading" style={{color: "white"}}>Turjeeman</div>
                         </Link>
                     </div>
@@ -66,15 +63,14 @@ class NavBar extends React.Component {
                         <Link to="/dashboard">
                             <button className="pt-button pt-minimal pt-icon-home" tabIndex={tabindex}><span className="no-highlight">Dashboard</span></button>
                         </Link>
-                        <button className="pt-button pt-minimal pt-icon-document" tabIndex={tabindex}>Files</button>
                         <span className="pt-navbar-divider" />
-                        <button className="pt-button pt-minimal pt-icon-user" tabIndex={tabindex}/>
                         <button className="pt-button pt-minimal pt-icon-notifications" tabIndex={tabindex}/>
-
+                        <span className="pt-navbar-divider" />
                         <Popover content={settingsMenu} position={Position.BOTTOM_RIGHT}>
                             <div>
-                                <span style={{fontSize: 14}}>{name + " " + surname}</span>
-                                <button className="pt-button pt-minimal pt-icon-cog" tabIndex={tabindex}/>
+                                <button className="pt-button pt-minimal pt-icon-cog" tabIndex={tabindex}>
+                                    <span style={{fontSize: 14}}>{name + " " + surname}</span>
+                                </button>
                             </div>
                         </Popover>
 
