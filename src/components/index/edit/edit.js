@@ -121,6 +121,7 @@ class Edit extends React.Component {
                 <div style={{paddingBottom: 100}}>
                     <button onClick={this.nextStage.bind(this)} type="button" className="pt-button pt-intent-success">
                         Sentencer
+                        <span className="pt-icon-standard pt-icon-arrow-right pt-align-right"></span>
                     </button>
                 </div>
             </div>
