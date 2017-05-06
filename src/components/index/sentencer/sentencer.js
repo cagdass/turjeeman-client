@@ -66,6 +66,24 @@ class Sentencer extends React.Component {
                 <div className="center-wh">
                     <h1>Hello from project with id {id}</h1>
                 </div>
+                <div className="center-wv" style={{paddingTop: 100}}>
+                    <button
+                        onClick={this.previousStage.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-warning"
+                        style={{margin: 20}}>
+                        <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
+                        Edit
+                    </button>
+                    <button
+                        onClick={this.nextStage.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-success"
+                        style={{margin: 20}}>
+                        Tokenizer
+                        <span className="pt-icon-standard pt-icon-arrow-right pt-align-right" />
+                    </button>
+                </div>
                 {sentences.map(this.renderSentencePair.bind(this))}
                 <div className="center-wv" style={{paddingBottom: 100}}>
                     <button

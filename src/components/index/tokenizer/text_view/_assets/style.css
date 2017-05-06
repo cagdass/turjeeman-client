@@ -42,3 +42,38 @@ body {
         padding: 2%;
     }
 }
+
+.center-wh {
+    padding: 20px;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-wh-stretch {
+    padding: 20px;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-wv {
+    padding: 20px;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wh {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.limit-width {
+    width: 40%;
+}

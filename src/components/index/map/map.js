@@ -10,6 +10,7 @@ class Project extends React.Component {
         this.state = {
             "inputText": "",
             "outputText": "",
+            "tokens": [],
             "mappings": [],
             "currentInputSelections": [],
             "currentOutputSelections": [],

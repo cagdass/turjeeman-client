@@ -218,14 +218,7 @@ class TextView extends React.Component {
                         </button>
                     </div>
                     <hr />
-                    <div className="text-area-stuff scrollable-div"
-                         onKeyUp={this.handleSelect.bind(this)}
-                         onKeyDown={this.handleSelect.bind(this)}
-                         onClick={this.handleSelect.bind(this)}>
-                        <div>
-                            {input}
-                        </div>
-                    </div>
+
                     <br />
                     <div className="text-area-stuff">
                         {characters.map(this.renderCharacter.bind(this))}

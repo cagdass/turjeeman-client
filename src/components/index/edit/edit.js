@@ -83,7 +83,7 @@ class Edit extends React.Component {
                         />
                     </h1>
                 </div>
-                <pre>{`Project Title: ${projectTitle}\nInput text: ${inputText}\nOutput text: ${outputText}\nSource language: ${sourceLanguage}\nTarget language: ${targetLanguage}`}</pre>
+                {/*<pre>{`Project Title: ${projectTitle}\nInput text: ${inputText}\nOutput text: ${outputText}\nSource language: ${sourceLanguage}\nTarget language: ${targetLanguage}`}</pre>*/}
                 <div className="center-wv">
                     <div>
                         <div className="pt-select" style={{margin: 20}}>
