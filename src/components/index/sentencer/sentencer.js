@@ -1,5 +1,7 @@
 import React, { PropTypes } from "react";
 
+import { Classes, EditableText, Intent, Switch } from "@blueprintjs/core";
+
 import "./_assets/style.css";
 import "../../../assets/css/style.css";
 
@@ -26,17 +28,75 @@ class Sentencer extends React.Component {
         })
     }
 
-    renderSentencePair (sentencePair) {
+    mergeSentence (index) {
+        let { sentences } = this.state;
+
+        if (index !== sentences.length - 1) {
+            let s1 = sentences[index][0];
+            let t1 = sentences[index][1];
+            let s2 = sentences[index+1][0];
+            let t2 = sentences[index+1][1];
+
+            let s0 = s1 + " " + s2;
+            let t0 = t1 + " " + t2;
+
+            sentences = [...sentences.slice(0, index), [s0, t0], ...sentences.slice(index + 2)];
+
+            this.setState({
+                sentences
+            });
+        }
+    }
+
+    addSentence (index) {
+        let { sentences } = this.state;
+
+        sentences = [...sentences.slice(0, index), ["", ""], ...sentences.slice(index)];
+
+        this.setState({sentences});
+    }
+
+    editSentence (index, index_, value) {
+        console.log(value);
+
+        let { sentences } = this.state;
+
+        sentences[index][index_] = value;
+
+        this.setState({
+            sentences
+        });
+    }
+
+    renderSentencePair (sentencePair, index) {
         return (<div className="center-wv padding-left-10p">
             <div className="padding-20 wh">
-                <span className="pt-icon-size pt-icon-add padding-10" />
-                <span className="pt-icon-size pt-icon-delete padding-10" />
+                <span
+                    className="pt-icon-size pt-icon-add padding-10"
+                    onClick={this.addSentence.bind(this, index)}
+                />
+                <span
+                    className="pt-icon-size pt-icon-delete padding-10"
+                    onClick={this.mergeSentence.bind(this, index)}
+                />
             </div>
             <div className="padding-10 limit-width">
-                <span className="pt-intent-primary">{sentencePair[0]}</span>
+                <EditableText
+                    multiline minLines={3} maxLines={12}
+                    placeholder="Enter a sentence"
+                    selectAllOnFocus={this.state.selectAllOnFocus}
+                    value={sentencePair[0]}
+                    onChange={this.editSentence.bind(this, index, 0)}
+                />
             </div>
             <div className="padding-10 limit-width">
-                <span className="pt-intent-primary">{sentencePair[1]}</span>
+                <EditableText
+                    multiline minLines={3} maxLines={12}
+                    placeholder="Enter a sentence"
+                    selectAllOnFocus={this.state.selectAllOnFocus}
+                    value={sentencePair[1]}
+                    onChange={this.editSentence.bind(this, index, 1)}
+                />
             </div>
         </div>
         );

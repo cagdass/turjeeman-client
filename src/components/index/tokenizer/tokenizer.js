@@ -120,7 +120,7 @@ class Tokenizer extends React.Component {
     }
 
     render () {
-        let { tokens, sentences, id, activeIndex } = this.state;
+        let { tokens, sentences = [], id, activeIndex } = this.state;
 
         return (
             <div>

@@ -4,32 +4,40 @@ import { Popover, PopoverInteractionKind, Position } from "@blueprintjs/core";
 import "./_assets/style.css";
 import "../../../../assets/css/style.css";
 
+const colors = ["darkRed", "red", "green", "blue", "#336699", "orange", "brown", "purple", "pink", "#996633", "lightGreen", "#008844"];
+
 class TextView extends React.Component {
     constructor (props, context, ...args) {
         super(props, context, ...args);
         this.state = {
-            "index": "",
             "selected": "",
+            "sentenceMappings": [],
             "sourceSelections": [],
             "targetSelections": [],
             "selectedIndices": [],
-            "clicked": true,
-            "showModal": false,
-            "latest": "",
+            "tokens": [],
         };
     }
 
     componentWillMount () {
-        let { index, currentIndex } = this.props;
+        let { index, tokens = []} = this.props;
+        let { sentenceMappings } = this.state;
+
+        for (let i = 0; i < colors.length; i++) {
+            sentenceMappings.push([]);
+            sentenceMappings[i].push([]);
+            sentenceMappings[i].push([]);
+        }
 
         this.setState({
             "index": index,
-            "showModal": (currentIndex === index),
+            "tokens": tokens,
+            "sentenceMappings": sentenceMappings,
         })
     }
 
     handleSelect (fieldName, e) {
-        let { index } = this.props;
+        let { activeColor } = this.props;
         let { sourceSelections, targetSelections } = this.state;
 
         this.getSelectionHtml();
@@ -47,193 +55,166 @@ class TextView extends React.Component {
         }
     }
 
-    getSelectionHtml() {
-        var html = "";
-        let start = -1;
-        let end = -1;
+    toggleThis (index, field) {
+        let { sentenceMappings } = this.state;
+        let { activeColor } = this.props;
+        let index1 = -1;
+        let index2 = -1;
 
-        if (typeof window.getSelection != "undefined") {
-            var sel = window.getSelection();
-            start = sel.anchorOffset;
-            end = sel.focusOffset;
+        let fieldIndex = (field === "input") ? 0 : 1;
 
-            if (sel.rangeCount) {
-                var container = document.createElement("div");
-                for (var i = 0, len = sel.rangeCount; i < len; ++i) {
-                    container.appendChild(sel.getRangeAt(i).cloneContents());
-                }
-                html = container.innerHTML.replace(/<\/?[^>]+(>|$)/g, "");
-            }
-        }
-        else if (typeof document.selection != "undefined") {
-            if (document.selection.type == "Text") {
-                html = document.selection.createRange().htmlText;
-            }
-        }
-
-        if (start > end) {
-            let mem = start;
-            start = end;
-            end = mem;
-        }
-
-        this.setState({
-            "selected": html,
-            "selectedIndices": [start, end]
-        });
-    }
-
-    addSelection () {
-        let { selected, selectedIndices, latest } = this.state;
-        let selections = this.state[latest];
-
-        if (selected.trim().length == 0) {
-            return;
-        }
-
-        if (selected.length > 0) {
-            let [start, end] = selectedIndices;
-            let cur_start = -1;
-            let cur_end = -1;
-            let index = -1;
-            let smallest = -1;
-
-            for (var i = 0; i < selections.length && index == -1; i++) {
-                [cur_start, cur_end] = selections[i];
-
-                if (cur_start === start && cur_end === end) {
-                    index = i;
-                }
-
-                if ((start > cur_start && start < cur_end) || (end > cur_start && end < cur_end) || (start < cur_start && end > cur_end)) {
-                    return;
-                }
-
-                if (cur_start < start) {
-                    smallest = i;
-                }
-            }
-
-            if (index !== -1) {
-                selections = [...selections.slice(0, index), ...selections.slice(index + 1)];
-
-                this.setState({
-                    "selected": "",
-                    [latest]: selections,
-                });
-            }
-            else {
-                if (smallest === -1) {
-                    selections = [selectedIndices, ...selections];
-                }
-                else {
-                    selections = [...selections.slice(0, smallest + 1), selectedIndices, ...selections.slice(smallest + 1)];
-                }
-
-                this.setState({
-                    "selected": "",
-                    [latest]: selections,
-                });
-            }
-        }
-
-        let { index } = this.props;
-        let { sourceSelections, targetSelections } = this.state;
-
-        if (latest === "sourceSelections") {
-            sourceSelections = selections;
-        }
-        else if (latest === "targetSelections") {
-            targetSelections = selections;
-        }
-
-        this.props.onChange(index, sourceSelections, targetSelections);
-    }
-
-    removeSelection (fieldName, index) {
-        let selections = this.state[fieldName];
-        let index_  = this.props.index;
-        let { sourceSelections, targetSelections } = this.state;
-
-        let cur_start = -1;
-        let cur_end = -1;
-
-        for (var i = 0; i < selections.length; i++) {
-            [cur_start, cur_end] = selections[i];
-
-            if (index >= cur_start && index < cur_end) {
-                selections = [...selections.slice(0, i), ...selections.slice(i + 1)];
-
-                this.setState({
-                    [fieldName]: selections,
-                });
-            }
-        }
-
-        if (fieldName === "sourceSelections") {
-            sourceSelections = selections;
-        }
-        else if (fieldName === "targetSelections") {
-            targetSelections = selections;
-        }
-        this.props.onChange(index_, sourceSelections, targetSelections);
-    }
-
-    clearSelections () {
-        this.setState({
-            "selected": "",
-            "selectedIndices": "",
-            "sourceSelections": "",
-            "targetSelections": "",
-        })
-    }
-
-    pickColor (index, selections) {
-        const colors = [
-            "darkgray", "lightgray"
-        ];
-
-        let res = "white";
-
-        for (let i = 0; i < selections.length; i++) {
-            if (selections[i][0] <= index && index < selections[i][1]) {
-                res = colors[i % colors.length]
-            }
-        }
-
-        return res;
-    }
-
-    showModal () {
-        let { index } = this.state;
-        this.props.setActiveIndex(index);
-    }
-
-    renderCharacter (field, character, index) {
         let selections = [];
-        if (field === "input") {
+        if (fieldIndex === 0) {
             selections = this.state.sourceSelections;
         }
-        else if (field === "output") {
+        else {
             selections = this.state.targetSelections;
         }
 
-        let color = this.pickColor(index, selections);
+        for (let i = 0; i < sentenceMappings.length; i++) {
+            let curColor = sentenceMappings[i][fieldIndex];
+            for (let j = 0; j < curColor.length; j++) {
+                if (curColor[j][0] <= index && index < curColor[j][1]) {
+                    index1 = i;
+                    index2 = j;
+                }
+            }
+        }
 
-        if (character == " ") {
+        if (index1 !== -1 && index2 !== -1) {
+            let curColor = sentenceMappings[index1][fieldIndex];
+            let newCurColor = [...curColor.slice(0, index2), ...curColor.slice(index2 + 1)];
+
+            sentenceMappings[index1][fieldIndex] = newCurColor;
+            let del = -1;
+
+            for (let i = 0; i < selections.length; i++) {
+                let cur = selections[i].indices;
+                if (cur[0] <= index && index < cur[1]) {
+                    del = i;
+                    break;
+                }
+            }
+
+            selections = [...selections.slice(0, del), ...selections.slice(del + 1)];
+
+            if (fieldIndex === 0) {
+                this.setState({
+                    sentenceMappings: sentenceMappings,
+                    sourceSelections: selections,
+                });
+            }
+            else {
+                this.setState({
+                    sentenceMappings: sentenceMappings,
+                    targetSelections: selections,
+                });
+            }
+        }
+        else {
+            let { tokens } = this.state;
+            let tokens_ = tokens[fieldIndex];
+            let save = [-1, -1];
+
+            for (let i = 0; i < tokens_.length; i++) {
+                let cur = tokens_[i];
+                let cur_start = cur[0];
+                let cur_end = cur[1];
+
+                if (cur_start <= index && index < cur_end) {
+                    sentenceMappings[activeColor][fieldIndex].push([cur_start, cur_end]);
+                    save = [cur_start, cur_end];
+                    break;
+                }
+            }
+
+            if (save[0] !== -1 && save[1] !== -1) {
+                selections = [...selections, {
+                    color: activeColor,
+                    indices: save,
+                }];
+            }
+
+            if (fieldIndex === 0) {
+                this.setState({
+                    sentenceMappings: sentenceMappings,
+                    sourceSelections: selections,
+                });
+            }
+            else {
+                this.setState({
+                    sentenceMappings: sentenceMappings,
+                    targetSelections: selections,
+                });
+            }
+        }
+
+        let thisGuy = this.props.index;
+
+        this.props.onChange(thisGuy, sentenceMappings);
+    }
+
+    pickColor (index, selections, selections2) {
+        const colors_ = [
+            "darkgray", "lightgray"
+        ];
+
+        const colors = ["darkRed", "red", "green", "blue", "#336699", "orange", "brown", "purple", "pink", "#996633", "lightGreen", "#008844"];
+
+        let res = "white";
+        let indices = [-1,-1];
+
+        for (let i = 0; i < selections.length; i++) {
+            if (selections[i][0] <= index && index < selections[i][1]) {
+                indices = selections[i];
+                res = colors_[i % colors_.length]
+            }
+        }
+
+        for (let i = 0; i < selections2.length; i++) {
+            if (selections2[i] !== undefined) {
+                let cur = selections2[i].indices;
+                if (cur[0] <= index && index < cur[1]) {
+                    indices = cur;
+                    res = colors[selections2[i].color % colors.length];
+                }
+            }
+        }
+
+        return {
+            color: res,
+            indices: indices,
+        };
+    }
+
+    renderCharacter (field, character, index) {
+        const colors = ["darkRed", "red", "green", "blue", "#336699", "orange", "brown", "purple", "pink", "#996633", "lightGreen", "#008844"];
+        let selections = [];
+        let { sourceSelections, targetSelections, sentenceMappings = [[[-1,-1]], [[-1,-1]]], tokens = [[[-1,-1]], [[-1,-1]]] } = this.state;
+        let tokenish = [];
+
+        if (field === "input") {
+            if (tokens !== undefined && tokens.length > 1) {
+                tokenish = tokens[0];
+                selections = sourceSelections;
+            }
+        }
+        else if (field === "output") {
+            if (tokens !== undefined && tokens.length > 1) {
+                tokenish = tokens[1];
+                selections = targetSelections;
+            }
+        }
+
+        let obj = this.pickColor(index, tokenish, selections);
+        let color = obj.color;
+        let selection = obj.indices;
+
+        if (character === " ") {
             return <span key={index}>
                 {character}
             </span>
         }
-
-        let fieldName = (field === "input") ? "sourceSelections" : "targetSelections";
-
-        const popoverContent = (
-            <div>
-                <button className="pt-button pt-popover-dismiss"
-                        onClick={this.removeSelection.bind(this, fieldName, index)}>Remove</button>
-            </div>
-        );
 
         return <span>
                 {(color === "white")
@@ -242,37 +223,27 @@ class TextView extends React.Component {
                     {character}
                 </span>
                     :
-                    <Popover
-                        content={popoverContent}
-                        interactionKind={PopoverInteractionKind.HOVER}
-                        popoverClassName="pt-popover-content-sizing"
-                        position={Position.TOP}
-                    >
                     <span key={index}
-                          style={{backgroundColor: color}}>
+                          style={{backgroundColor: color}}
+                          onClick={this.toggleThis.bind(this, index, field)}
+                        >
                         {character}
                     </span>
-                    </Popover>
                 }
         </span>;
     }
 
     render () {
-        let { index, selected, sourceSelections, targetSelections, selectedIndices, latest } = this.state;
-        let { input, output, currentIndex } = this.props;
-
-        let showModal = (index === currentIndex);
-
+        let { tokens, sentenceMappings, sourceSelections, targetSelections } = this.state;
+        let { activeColor, input, output, currentIndex } = this.props;
 
         let input_ = input.split('') || [];
         let output_ = output.split('') || [];
 
         return (
             <div>
-                {/*onClick={this.addSelection.bind(this)}*/}
-                {/*<pre>{`Selected: ${selected}\nLatest: ${latest}\nSource Selections: ${sourceSelections}\nTarget Selections ${targetSelections}\nInput: ${input}\nSelind ${selectedIndices}`}</pre>*/}
-                {/*<pre>{`index: ${index}\ncurrentIndex: ${currentIndex}\nshowModal: ${showModal}`}</pre>*/}
                 <div>
+                    {/*<pre>{`Tokens: ${tokens}\nMappings: ${JSON.stringify(sentenceMappings)}\nactiveColor: ${activeColor}\nsourceSelections: ${JSON.stringify(sourceSelections)}\ntargetSelection: ${JSON.stringify(targetSelections)}`}</pre>*/}
                     <div className="center-wh-stretch">
                         <div className="center-wv">
                             <div className="text-area-stuff">

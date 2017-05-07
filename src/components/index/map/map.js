@@ -4,7 +4,9 @@ import TextView from "./text_view/text_view";
 
 import "./_assets/style.css"
 
-const colors = ["darkRed", "red", "green", "blue", "#336699", "orange", "brown", "purple", "pink", "#996633", "lightGreen"];
+import appState from "../../../utility/app_state";
+
+const colors = ["darkRed", "red", "green", "blue", "#336699", "orange", "brown", "purple", "pink", "#996633", "lightGreen", "#008844"];
 
 class Project extends React.Component {
     constructor (props, context, ...args) {
@@ -16,8 +18,7 @@ class Project extends React.Component {
             "mappings": [],
             "currentInputSelections": [],
             "currentOutputSelections": [],
-            "activeIndex": -1,
-            "activeColor": -1,
+            "activeColor": 0,
             "activeColorLiteral": "",
         };
     }
@@ -25,9 +26,16 @@ class Project extends React.Component {
     componentWillMount () {
         let id = this.props.params.id.trim();
 
-        this.setState({id});
+        let tokenizer = appState.getTokenizer(id);
 
-        // let tokenizer = appState.getTokenizer(id);
+        if (tokenizer !== {}) {
+            this.setState({
+                "id": id,
+                "tokens": tokenizer.tokens,
+                "sentences": tokenizer.sentences,
+            });
+        }
+
         // let edit = appState.getEdit(id);
         // let map = appState.getMap(id);
 
@@ -95,19 +103,24 @@ class Project extends React.Component {
         </div>)
     }
 
-    handleTokenChange () {
+    handleTokenChange (index, selectedMappings) {
+        let { mappings } = this.state;
 
-    }
+        mappings[index] = selectedMappings;
 
-    changeActiveIndex (index) {
-
+        this.setState({mappings});
     }
 
     renderSentencePair (sentencePair, index) {
         let source = sentencePair[0] || "";
         let target = sentencePair[1] || "";
 
-        let { activeIndex } = this.state;
+        let { tokens = [], activeColorLiteral, activeColor } = this.state;
+
+        let tokens_ = [];
+        if (tokens.length > index) {
+            tokens_ = tokens[index];
+        }
 
         return (<div className="center-wv">
             <TextView
@@ -115,9 +128,9 @@ class Project extends React.Component {
                 output={target}
                 ref={"tokenize_" + index}
                 onChange={this.handleTokenChange.bind(this)}
-                setActiveIndex={this.changeActiveIndex.bind(this, index)}
-                currentIndex={activeIndex}
                 index={index}
+                tokens={tokens_}
+                activeColor={activeColor}
             />
         </div>)
     }
@@ -150,13 +163,45 @@ class Project extends React.Component {
         }
     }
 
+    previousStage () {
+        let { id, sentences, tokens } = this.state;
+
+        let { router } = this.context;
+
+        // appState.setTokenizer(id, sentences, tokens);
+
+        router.push("/tokenizer/" + id);
+    }
+
+    saveProject () {
+
+    }
+
     render () {
         let { inputText = "", outputText = "", sentences = [], mappings, activeColor } = this.state;
 
-        let nums = [0,1,2,3,4,5,6,7,8,9,10];
+        let nums = [0,1,2,3,4,5,6,7,8,9,10,11];
 
         return (
             <div className="center-wh">
+                <div className="center-wv" style={{paddingTop: 50}}>
+                    <button
+                        onClick={this.previousStage.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-warning"
+                        style={{margin: 20}}>
+                        <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
+                        Tokenizer
+                    </button>
+                    <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-success"
+                        style={{margin: 20}}>
+                        Save project
+                        <span className="pt-icon-standard pt-align-right" />
+                    </button>
+                </div>
                 <h1>Project</h1>
                 <div className="colors-shit center-wv">
                     {nums.map(this.renderColorPicks.bind(this))}
@@ -166,6 +211,24 @@ class Project extends React.Component {
                     <div className="center-wh">
                         {sentences.map(this.renderSentencePair.bind(this))}
                     </div>
+                </div>
+                <div className="center-wv" style={{paddingBottom: 100}}>
+                    <button
+                        onClick={this.previousStage.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-warning"
+                        style={{margin: 20}}>
+                        <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
+                        Tokenizer
+                    </button>
+                    <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-success"
+                        style={{margin: 20}}>
+                        Save project
+                        <span className="pt-icon-standard pt-align-right" />
+                    </button>
                 </div>
             </div>
         );
