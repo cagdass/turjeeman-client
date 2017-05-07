@@ -2,6 +2,8 @@ import React, { PropTypes } from "react";
 
 import { Classes, EditableText, Intent, Switch } from "@blueprintjs/core";
 
+import appState from "../../../utility/app_state";
+
 import "./_assets/style.css";
 import "../../../assets/css/style.css";
 
@@ -10,12 +12,31 @@ class Sentencer extends React.Component {
         super(props, context, ...args);
         this.state = {
             "sentences": [],
+            "id": "",
+            "projectTitle": "",
+            "inputText": "",
+            "outputText": "",
+            "sourceLanguage": "",
+            "targetLanguage": "",
         };
     }
 
     componentWillMount () {
-        let id = this.props.params.id;
+        let id = this.props.params.id.trim();
         this.setState({id});
+
+        let edit = appState.getEdit(id);
+
+        if (edit !== {}) {
+            this.setState({
+                id: id,
+                projectTitle: edit.projectTitle,
+                inputText: edit.inputText,
+                outputText: edit.outputText,
+                sourceLanguage: edit.sourceLanguage,
+                targetLanguage: edit.targetLanguage,
+            });
+        }
     }
 
     componentDidMount () {
@@ -118,14 +139,15 @@ class Sentencer extends React.Component {
         router.push("/tokenizer/" + id);
     }
 
+    saveProject () {
+
+    }
+
     render () {
-        let { sentences, id } = this.state;
+        let { sentences, projectTitle, id } = this.state;
 
         return (
             <div>
-                <div className="center-wh">
-                    <h1>Hello from project with id {id}</h1>
-                </div>
                 <div className="center-wv" style={{paddingTop: 100}}>
                     <button
                         onClick={this.previousStage.bind(this)}
@@ -136,6 +158,13 @@ class Sentencer extends React.Component {
                         Edit
                     </button>
                     <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save"
+                        style={{margin: 20}}>
+                        Save project
+                    </button>
+                    <button
                         onClick={this.nextStage.bind(this)}
                         type="button"
                         className="pt-button pt-intent-success"
@@ -143,6 +172,9 @@ class Sentencer extends React.Component {
                         Tokenizer
                         <span className="pt-icon-standard pt-icon-arrow-right pt-align-right" />
                     </button>
+                </div>
+                <div className="center-wh">
+                    <h1>{projectTitle}</h1>
                 </div>
                 {sentences.map(this.renderSentencePair.bind(this))}
                 <div className="center-wv" style={{paddingBottom: 100}}>
@@ -153,6 +185,13 @@ class Sentencer extends React.Component {
                         style={{margin: 20}}>
                         <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
                         Edit
+                    </button>
+                    <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save "
+                        style={{margin: 20}}>
+                        Save project
                     </button>
                     <button
                         onClick={this.nextStage.bind(this)}

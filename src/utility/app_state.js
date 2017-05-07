@@ -11,6 +11,12 @@ function AppState() {
     let TOKENIZER_KEY = "tokenizer";
     let tokenizers = [];
 
+    let SENTENCER_KEY = "sentencer";
+    let sentencers = [];
+
+    let MAPPER_KEY = "mapper";
+    let mappers = [];
+
     appState.initializeAppState = () => {
         return Promise.try(() => {
             let userString = localStorage.getItem(USER_KEY);
@@ -23,15 +29,48 @@ function AppState() {
         });
     };
 
-    appState.getTokenizer = (id) => {
-        for (let i = 0; i < tokenizers.length; i++) {
-            if (tokenizers[i].id === id) {
-                return tokenizers[i];
+    appState.getSentencer = (id) => {
+        for (let i = 0; i < sentencers.length; i++) {
+            if (sentencers[i].id === id) {
+                return sentencers[i];
             }
         }
 
         return {};
     };
+
+    appState.getMapper = (id) => {
+        for (let i = 0; i < mappers.length; i++) {
+            if (mappers[i].id === id) {
+                return mappers[i];
+            }
+        }
+
+        return {};
+    };
+
+    appState.setMapper = (id, mappings) => Promise.try(() => {
+        let index = -1;
+        let mapper_ = {
+            "id": id,
+            "mappings": mappings,
+        };
+
+        for (let i = 0; i < mappers.length; i++) {
+            if (mappers[i].id === id) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index === -1) {
+            mappers.push(mapper_);
+        }
+        else {
+            mappers[index] = mapper_;
+        }
+        return localStorage.setItem(MAPPER_KEY, JSON.stringify(mappers));
+    }).then(() => mappers);
 
     appState.setTokenizer = (id, sentences, tokens) => Promise.try(() => {
         let index = -1;
@@ -56,6 +95,41 @@ function AppState() {
         }
         return localStorage.setItem(TOKENIZER_KEY, JSON.stringify(tokenizers));
     }).then(() => tokenizers);
+
+    appState.setSentencer = (id, sentences) => Promise.try(() => {
+        let index = -1;
+        let sentencer_ = {
+            "id": id,
+            "sentences": sentences,
+            "tokens": tokens,
+        };
+
+        for (let i = 0; i < sentencers.length; i++) {
+            if (sentencers[i].id === id) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index === -1) {
+            sentencers.push(sentencer_);
+        }
+        else {
+            sentencers[index] = sentencer_;
+        }
+        return localStorage.setItem(SENTENCER_KEY, JSON.stringify(sentencers));
+    }).then(() => sentencers);
+
+
+    appState.getTokenizer = (id) => {
+        for (let i = 0; i < tokenizers.length; i++) {
+            if (tokenizers[i].id === id) {
+                return tokenizers[i];
+            }
+        }
+
+        return {};
+    };
 
     appState.getEdit = (id) => {
         for (let i = 0; i < projects.length; i++) {

@@ -14,6 +14,11 @@ class Project extends React.Component {
         this.state = {
             "id": "",
             "sentences": [],
+            "projectTitle": "",
+            "inputText": "",
+            "outputText": "",
+            "sourceLanguage": "",
+            "targetLanguage": "",
             "tokens": [],
             "mappings": [],
             "currentInputSelections": [],
@@ -26,7 +31,21 @@ class Project extends React.Component {
     componentWillMount () {
         let id = this.props.params.id.trim();
 
+
         let tokenizer = appState.getTokenizer(id);
+
+        let edit = appState.getEdit(id);
+
+        if (edit !== {}) {
+            this.setState({
+                id: id,
+                projectTitle: edit.projectTitle,
+                inputText: edit.inputText,
+                outputText: edit.outputText,
+                sourceLanguage: edit.sourceLanguage,
+                targetLanguage: edit.targetLanguage,
+            });
+        }
 
         if (tokenizer !== {}) {
             this.setState({
@@ -35,10 +54,6 @@ class Project extends React.Component {
                 "sentences": tokenizer.sentences,
             });
         }
-
-        // let edit = appState.getEdit(id);
-        // let map = appState.getMap(id);
-
     }
 
     componentDidMount () {
@@ -164,11 +179,11 @@ class Project extends React.Component {
     }
 
     previousStage () {
-        let { id, sentences, tokens } = this.state;
+        let { id, mappings } = this.state;
 
         let { router } = this.context;
 
-        // appState.setTokenizer(id, sentences, tokens);
+        appState.setMapper(id, mappings);
 
         router.push("/tokenizer/" + id);
     }
@@ -178,13 +193,13 @@ class Project extends React.Component {
     }
 
     render () {
-        let { inputText = "", outputText = "", sentences = [], mappings, activeColor } = this.state;
+        let { inputText = "", outputText = "", sentences = [], mappings, activeColor, projectTitle } = this.state;
 
         let nums = [0,1,2,3,4,5,6,7,8,9,10,11];
 
         return (
             <div className="center-wh">
-                <div className="center-wv" style={{paddingTop: 50}}>
+                <div className="center-wv" style={{paddingTop: 50, marginRight: 120}}>
                     <button
                         onClick={this.previousStage.bind(this)}
                         type="button"
@@ -196,23 +211,23 @@ class Project extends React.Component {
                     <button
                         onClick={this.saveProject.bind(this)}
                         type="button"
-                        className="pt-button pt-intent-success"
+                        className="pt-button pt-intent-save"
                         style={{margin: 20}}>
                         Save project
                         <span className="pt-icon-standard pt-align-right" />
                     </button>
                 </div>
-                <h1>Project</h1>
+                <h1>{projectTitle}</h1>
                 <div className="colors-shit center-wv">
                     {nums.map(this.renderColorPicks.bind(this))}
                 </div>
-                {mappings.map(this.renderMappingPair.bind(this))}
+                {/*{mappings.map(this.renderMappingPair.bind(this))}*/}
                 <div className="translate-div">
                     <div className="center-wh">
                         {sentences.map(this.renderSentencePair.bind(this))}
                     </div>
                 </div>
-                <div className="center-wv" style={{paddingBottom: 100}}>
+                <div className="center-wv" style={{paddingBottom: 100, marginRight: 120}}>
                     <button
                         onClick={this.previousStage.bind(this)}
                         type="button"
@@ -224,7 +239,7 @@ class Project extends React.Component {
                     <button
                         onClick={this.saveProject.bind(this)}
                         type="button"
-                        className="pt-button pt-intent-success"
+                        className="pt-button pt-intent-save"
                         style={{margin: 20}}>
                         Save project
                         <span className="pt-icon-standard pt-align-right" />

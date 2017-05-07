@@ -88,6 +88,10 @@ class Edit extends React.Component {
         })
     }
 
+    saveProject () {
+
+    }
+
     render () {
         let { inputText, outputText, sourceLanguage, targetLanguage, projectTitle, id } = this.state;
 
@@ -138,7 +142,14 @@ class Edit extends React.Component {
                         >{outputText}</textarea>
                     </div>
                 </div>
-                <div style={{paddingBottom: 100}}>
+                <div style={{paddingBottom: 100, marginLeft: 100}}>
+                    <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save"
+                        style={{margin: 20}}>
+                        Save project
+                    </button>
                     <button onClick={this.nextStage.bind(this)} type="button" className="pt-button pt-intent-success">
                         Sentencer
                         <span className="pt-icon-standard pt-icon-arrow-right pt-align-right"></span>

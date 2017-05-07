@@ -14,6 +14,12 @@ class Tokenizer extends React.Component {
             "sentences": [],
             "tokens": [],
             "activeIndex": -1,
+            "id": "",
+            "projectTitle": "",
+            "inputText": "",
+            "outputText": "",
+            "sourceLanguage": "",
+            "targetLanguage": "",
         };
     }
 
@@ -22,7 +28,18 @@ class Tokenizer extends React.Component {
 
         let tokenizer = appState.getTokenizer(id);
 
-        console.log(tokenizer);
+        let edit = appState.getEdit(id);
+
+        if (edit !== {}) {
+            this.setState({
+                id: id,
+                projectTitle: edit.projectTitle,
+                inputText: edit.inputText,
+                outputText: edit.outputText,
+                sourceLanguage: edit.sourceLanguage,
+                targetLanguage: edit.targetLanguage,
+            });
+        }
 
         if (tokenizer === {}) {
             this.setState({id});
@@ -119,14 +136,18 @@ class Tokenizer extends React.Component {
         </div>)
     }
 
+    saveProject () {
+
+    }
+
     render () {
-        let { tokens, sentences = [], id, activeIndex } = this.state;
+        let { tokens, projectTitle, sentences = [], id, activeIndex } = this.state;
 
         return (
             <div>
                 <div className="center-wh">
-                    <pre>{`Tokens: ${tokens}`}</pre>
-                    <div className="center-wv" style={{paddingBottom: 100}}>
+                    {/*<pre>{`Tokens: ${tokens}`}</pre>*/}
+                    <div className="center-wv" style={{paddingTop: 100}}>
                         <button
                             onClick={this.previousStage.bind(this)}
                             type="button"
@@ -134,6 +155,13 @@ class Tokenizer extends React.Component {
                             style={{margin: 20}}>
                             <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
                             Sentencer
+                        </button>
+                        <button
+                            onClick={this.saveProject.bind(this)}
+                            type="button"
+                            className="pt-button pt-intent-save "
+                            style={{margin: 20}}>
+                            Save project
                         </button>
                         <button
                             onClick={this.nextStage.bind(this)}
@@ -144,7 +172,7 @@ class Tokenizer extends React.Component {
                             <span className="pt-icon-standard pt-icon-arrow-right pt-align-right" />
                         </button>
                     </div>
-                    <h1>Hello from project with id {id}</h1>
+                    <h1>{projectTitle}</h1>
                     <div>
                         {sentences.map(this.renderSentencePair.bind(this))}
                     </div>
@@ -157,6 +185,13 @@ class Tokenizer extends React.Component {
                         style={{margin: 20}}>
                         <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
                         Sentencer
+                    </button>
+                    <button
+                        onClick={this.saveProject.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save"
+                        style={{margin: 20}}>
+                        Save project
                     </button>
                     <button
                         onClick={this.nextStage.bind(this)}
