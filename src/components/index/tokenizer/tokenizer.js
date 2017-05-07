@@ -2,6 +2,8 @@ import React, { PropTypes } from "react";
 
 import TextView from "./text_view/text_view";
 
+import appState from "../../../utility/app_state";
+
 import "./_assets/style.css";
 import "../../../assets/css/style.css";
 
@@ -16,7 +18,23 @@ class Tokenizer extends React.Component {
     }
 
     componentWillMount () {
-        let id = this.props.params.id;
+        let id = this.props.params.id.trim();
+
+        let tokenizer = appState.getTokenizer(id);
+
+        console.log(tokenizer);
+
+        if (tokenizer === {}) {
+            this.setState({id});
+        }
+        else {
+            this.setState({
+                "id": id,
+                "sentences": tokenizer.sentences,
+                "tokens": tokenizer.tokens,
+            })
+        }
+
         this.setState({id});
     }
 
@@ -27,9 +45,14 @@ class Tokenizer extends React.Component {
             , ["Bu görüntüler sosyal medyada 2 oyuncu arasında kıyaslama yapılmasına neden oldu...", "These images caused comparisons between 2 players in the social media..."]
         ];
 
-        let tokens = [];
-        for (let i = 0; i < sentences.length; i++) {
-            tokens.push([]);
+        let { tokens } = this.state;
+        console.log(tokens);
+
+        if (tokens === [] || tokens === undefined) {
+            tokens = [];
+            for (let i = 0; i < sentences.length; i++) {
+                tokens.push([]);
+            }
         }
 
         this.setState({
@@ -39,17 +62,21 @@ class Tokenizer extends React.Component {
     }
 
     previousStage () {
-        let { id } = this.state;
+        let { id, sentences, tokens } = this.state;
 
         let { router } = this.context;
+
+        appState.setTokenizer(id, sentences, tokens);
 
         router.push("/sentencer/" + id);
     }
 
     nextStage () {
-        let { id } = this.state;
+        let { id, sentences, tokens } = this.state;
 
         let { router } = this.context;
+
+        appState.setTokenizer(id, sentences, tokens);
 
         router.push("/map/" + id);
     }
@@ -72,7 +99,10 @@ class Tokenizer extends React.Component {
         let source = sentencePair[0] || "";
         let target = sentencePair[1] || "";
 
-        let { activeIndex } = this.state;
+        let { activeIndex, tokens } = this.state;
+
+        let sourceSelections = tokens[index][0] || [];
+        let targetSelections = tokens[index][1] || [];
 
         return (<div className="center-wv">
             <TextView
@@ -80,6 +110,8 @@ class Tokenizer extends React.Component {
                 output={target}
                 ref={"tokenize_" + index}
                 onChange={this.handleTokenChange.bind(this)}
+                sourceSelections={sourceSelections}
+                targetSelections={targetSelections}
                 setActiveIndex={this.changeActiveIndex.bind(this, index)}
                 currentIndex={activeIndex}
                 index={index}
@@ -93,7 +125,7 @@ class Tokenizer extends React.Component {
         return (
             <div>
                 <div className="center-wh">
-                    {/*<pre>{`Tokens: ${tokens}`}</pre>*/}
+                    <pre>{`Tokens: ${tokens}`}</pre>
                     <div className="center-wv" style={{paddingBottom: 100}}>
                         <button
                             onClick={this.previousStage.bind(this)}

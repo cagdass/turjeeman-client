@@ -23,3 +23,29 @@
         padding: 20px;
     }
 }
+
+.colors-shit {
+    position: fixed;
+    top: 50px;
+    height: 200px;
+}
+
+.center-wh {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-wh-color {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.color-el {
+    width: 25px;
+    height: 25px;
+    margin: 12px;
+}

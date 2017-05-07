@@ -20,11 +20,13 @@ class TextView extends React.Component {
     }
 
     componentWillMount () {
-        let { index, currentIndex } = this.props;
+        let { index, currentIndex, sourceSelections, targetSelections } = this.props;
 
         this.setState({
             "index": index,
             "showModal": (currentIndex === index),
+            "sourceSelections": sourceSelections,
+            "targetSelections": targetSelections,
         })
     }
 

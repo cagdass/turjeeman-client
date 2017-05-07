@@ -2,6 +2,8 @@ import React, { PropTypes } from "react";
 
 import { Classes, EditableText, Intent, Switch } from "@blueprintjs/core";
 
+import appState from "../../../utility/app_state";
+
 import "./_assets/style.css"
 import "../../../assets/css/style.css";
 
@@ -19,15 +21,31 @@ class Edit extends React.Component {
     }
 
     componentWillMount() {
-        let id = this.props.params.id;
-        this.setState({
-            id: id,
-            projectTitle: "",
-            inputText: "",
-            outputText: "",
-            sourceLanguage: "",
-            targetLanguage: "",
-        });
+        let id = this.props.params.id.trim();
+
+        let project = appState.getEdit(id);
+        console.log(project);
+
+        if (project !== {}) {
+            this.setState({
+                id: id,
+                projectTitle: project.projectTitle,
+                inputText: project.inputText,
+                outputText: project.outputText,
+                sourceLanguage: project.sourceLanguage,
+                targetLanguage: project.targetLanguage,
+            });
+        }
+        else {
+            this.setState({
+                id: id,
+                projectTitle: "",
+                inputText: "",
+                outputText: "",
+                sourceLanguage: "",
+                targetLanguage: "",
+            });
+        }
     }
 
     handleChange (fieldName, event) {
@@ -39,8 +57,10 @@ class Edit extends React.Component {
     }
 
     nextStage () {
-        let { id } = this.state;
+        let { id, inputText, outputText, projectTitle, sourceLanguage, targetLanguage } = this.state;
         let { router } = this.context;
+
+        appState.setEdit(id, inputText, outputText, sourceLanguage, targetLanguage, projectTitle);
 
         router.push("/sentencer/ " + id);
     }
@@ -88,16 +108,16 @@ class Edit extends React.Component {
                     <div>
                         <div className="pt-select" style={{margin: 20}}>
                             <select onChange={this.updateLanguage.bind(this, "sourceLanguage")}>
-                                <option defaultValue>Choose source language</option>
-                                {targetLanguage !== "English" && <option value="English">English</option>}
-                                {targetLanguage !== "Turkish" && <option value="Turkish">Turkish</option>}
+                                {sourceLanguage === "" ? <option defaultValue>Choose source language</option> : <option defaultValue>{sourceLanguage}</option>}
+                                {sourceLanguage !== "English" && <option value="English">English</option>}
+                                {sourceLanguage !== "Turkish" && <option value="Turkish">Turkish</option>}
                             </select>
                         </div>
                         <div className="pt-select" style={{margin: 20}}>
                             <select onChange={this.updateLanguage.bind(this, "targetLanguage")}>
-                                <option defaultValue>Choose target language</option>
-                                {sourceLanguage !== "English" && <option value="English">English</option>}
-                                {sourceLanguage !== "Turkish" && <option value="Turkish">Turkish</option>}
+                                {targetLanguage === "" ? <option defaultValue>Choose target language</option> : <option defaultValue>{targetLanguage}</option>}
+                                {targetLanguage !== "English" && <option value="English">English</option>}
+                                {targetLanguage !== "Turkish" && <option value="Turkish">Turkish</option>}
                             </select>
                         </div>
                     </div>
@@ -108,14 +128,14 @@ class Edit extends React.Component {
                             className="text-field pt-input pt-large "
                             dir="auto"
                             onChange={this.handleChange.bind(this, "inputText")}
-                        />
+                        >{inputText}</textarea>
                     </div>
                     <div className="encapsulator">
                         <textarea
                             className="pt-input pt-large text-field"
                             dir="auto"
                             onChange={this.handleChange.bind(this, "outputText")}
-                        />
+                        >{outputText}</textarea>
                     </div>
                 </div>
                 <div style={{paddingBottom: 100}}>
