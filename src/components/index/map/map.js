@@ -4,16 +4,21 @@ import TextView from "./text_view/text_view";
 
 import "./_assets/style.css"
 
+const colors = ["darkRed", "red", "green", "blue", "#336699", "orange", "brown", "purple", "pink", "#996633", "lightGreen"];
+
 class Project extends React.Component {
     constructor (props, context, ...args) {
         super(props, context, ...args);
         this.state = {
+            "id": "",
             "sentences": [],
             "tokens": [],
             "mappings": [],
             "currentInputSelections": [],
             "currentOutputSelections": [],
             "activeIndex": -1,
+            "activeColor": -1,
+            "activeColorLiteral": "",
         };
     }
 
@@ -21,6 +26,11 @@ class Project extends React.Component {
         let id = this.props.params.id.trim();
 
         this.setState({id});
+
+        // let tokenizer = appState.getTokenizer(id);
+        // let edit = appState.getEdit(id);
+        // let map = appState.getMap(id);
+
     }
 
     componentDidMount () {
@@ -112,24 +122,44 @@ class Project extends React.Component {
         </div>)
     }
 
+    changeColor (index) {
+        this.setState({
+            activeColor: index,
+            activeColorLiteral: colors[index]
+        });
+    }
+
+    renderColorPicks (index) {
+        let { activeColor } = this.state;
+
+        let color = colors[index];
+
+        if (activeColor !== index) {
+            return (
+                <div onClick={this.changeColor.bind(this, index)} className="color-el" style={{backgroundColor: color}}></div>
+            )
+        }
+        else {
+            return (
+                <div style={{backgroundColor: color}}>
+                    <div style={{backgroundColor: "white"}} className="color-el-white">
+                        <div onClick={this.changeColor.bind(this, index)} className="color-el" style={{backgroundColor: color}}></div>
+                    </div>
+                </div>
+            )
+        }
+    }
+
     render () {
-        let { inputText = "", outputText = "", sentences = [], mappings } = this.state;
+        let { inputText = "", outputText = "", sentences = [], mappings, activeColor } = this.state;
+
+        let nums = [0,1,2,3,4,5,6,7,8,9,10];
 
         return (
             <div className="center-wh">
                 <h1>Project</h1>
                 <div className="colors-shit center-wv">
-                    <div className="color-el" style={{backgroundColor: "darkRed"}}></div>
-                    <div className="color-el" style={{backgroundColor: "red"}}></div>
-                    <div className="color-el" style={{backgroundColor: "green"}}></div>
-                    <div className="color-el" style={{backgroundColor: "blue"}}></div>
-                    <div className="color-el" style={{backgroundColor: "#336699"}}></div>
-                    <div className="color-el" style={{backgroundColor: "orange"}}></div>
-                    <div className="color-el" style={{backgroundColor: "brown"}}></div>
-                    <div className="color-el" style={{backgroundColor: "purple"}}></div>
-                    <div className="color-el" style={{backgroundColor: "pink"}}></div>
-                    <div className="color-el" style={{backgroundColor: "#996633"}}></div>
-                    <div className="color-el" style={{backgroundColor: "lightGreen"}}></div>
+                    {nums.map(this.renderColorPicks.bind(this))}
                 </div>
                 {mappings.map(this.renderMappingPair.bind(this))}
                 <div className="translate-div">

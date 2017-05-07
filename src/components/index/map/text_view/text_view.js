@@ -275,13 +275,6 @@ class TextView extends React.Component {
                 <div>
                     <div className="center-wh-stretch">
                         <div className="center-wv">
-                            <div className="buttons-stuff">
-                                <button type="button"
-                                        onClick={this.showModal.bind(this)}
-                                        className="pt-button pt-intent-primary">
-                                    Tokenize
-                                </button>
-                            </div>
                             <div className="text-area-stuff">
                                 {input_.map(this.renderCharacter.bind(this, "input"))}
                             </div>
@@ -289,35 +282,6 @@ class TextView extends React.Component {
                                 {output_.map(this.renderCharacter.bind(this, "output"))}
                             </div>
                         </div>
-                        {showModal &&
-                        <div className="center-wh">
-                            <div className="center-wv">
-                                <div className="text-area-stuff scrollable-div"
-                                     onKeyUp={this.handleSelect.bind(this, "input")}
-                                     onKeyDown={this.handleSelect.bind(this, "input")}
-                                     onClick={this.handleSelect.bind(this, "input")}>
-                                    <div>
-                                        {input}
-                                    </div>
-                                </div>
-                                <div className="text-area-stuff scrollable-div"
-                                     onKeyUp={this.handleSelect.bind(this, "output")}
-                                     onKeyDown={this.handleSelect.bind(this, "output")}
-                                     onClick={this.handleSelect.bind(this, "output")}>
-                                    <div>
-                                        {output}
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <button type="button" onClick={this.addSelection.bind(this)} className="pt-button pt-intent-primary">
-                                        Save
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        }
                     </div>
                     <hr />
                     <br />

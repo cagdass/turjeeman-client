@@ -45,7 +45,22 @@
 }
 
 .color-el {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 25px;
     height: 25px;
-    margin: 12px;
+    margin: 4px;
+    border-radius: 2px;
+}
+
+.color-el-white {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    padding: 1px;
+    paddingTop: -1px;
+    margin: 2px;
 }
