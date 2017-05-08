@@ -69,7 +69,7 @@ function AppState() {
         else {
             mappers[index] = mapper_;
         }
-        return localStorage.setItem(MAPPER_KEY, JSON.stringify(mappers));
+        return sessionStorage.setItem(MAPPER_KEY, JSON.stringify(mappers));
     }).then(() => mappers);
 
     appState.setTokenizer = (id, sentences, tokens) => Promise.try(() => {
@@ -93,7 +93,7 @@ function AppState() {
         else {
             tokenizers[index] = tokenize;
         }
-        return localStorage.setItem(TOKENIZER_KEY, JSON.stringify(tokenizers));
+        return sessionStorage.setItem(TOKENIZER_KEY, JSON.stringify(tokenizers));
     }).then(() => tokenizers);
 
     appState.setSentencer = (id, sentences) => Promise.try(() => {
@@ -101,7 +101,6 @@ function AppState() {
         let sentencer_ = {
             "id": id,
             "sentences": sentences,
-            "tokens": tokens,
         };
 
         for (let i = 0; i < sentencers.length; i++) {
@@ -117,7 +116,7 @@ function AppState() {
         else {
             sentencers[index] = sentencer_;
         }
-        return localStorage.setItem(SENTENCER_KEY, JSON.stringify(sentencers));
+        return sessionStorage.setItem(SENTENCER_KEY, JSON.stringify(sentencers));
     }).then(() => sentencers);
 
 
@@ -165,7 +164,7 @@ function AppState() {
         else {
             projects[index] = project;
         }
-        return localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+        return sessionStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
     }).then(() => projects);
 
     appState.getUser = () => user;

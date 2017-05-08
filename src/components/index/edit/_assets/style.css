@@ -5,5 +5,9 @@
 }
 
 .encapsulator {
-    padding: 5%;
+    margin: 10%;
+}
+
+.limit-width {
+    width: 40%;
 }

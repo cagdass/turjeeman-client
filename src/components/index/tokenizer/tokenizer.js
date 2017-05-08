@@ -23,12 +23,12 @@ class Tokenizer extends React.Component {
         };
     }
 
-    componentWillMount () {
+    componentDidMount () {
         let id = this.props.params.id.trim();
 
-        let tokenizer = appState.getTokenizer(id);
-
         let edit = appState.getEdit(id);
+        let sentencer = appState.getSentencer(id);
+        let tokenizer = appState.getTokenizer(id);
 
         if (edit !== {}) {
             this.setState({
@@ -41,42 +41,58 @@ class Tokenizer extends React.Component {
             });
         }
 
-        if (tokenizer === {}) {
-            this.setState({id});
-        }
-        else {
+        let sentences = [];
+
+        if (sentencer !== {}) {
+            sentences = sentencer.sentences;
             this.setState({
                 "id": id,
-                "sentences": tokenizer.sentences,
-                "tokens": tokenizer.tokens,
-            })
+                "sentences": sentencer.sentences,
+            });
         }
 
-        this.setState({id});
-    }
-
-    componentDidMount () {
-        // @TODO: Replace this with a backend function that'll retrieve the input/output text.
-        let sentences = [["Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı.", "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal."]
-            , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
-            , ["Bu görüntüler sosyal medyada 2 oyuncu arasında kıyaslama yapılmasına neden oldu...", "These images caused comparisons between 2 players in the social media..."]
-        ];
-
-        let { tokens } = this.state;
-        console.log(tokens);
-
-        if (tokens === [] || tokens === undefined) {
-            tokens = [];
-            for (let i = 0; i < sentences.length; i++) {
-                tokens.push([]);
-            }
+        let tokens = [];
+        for (let i = 0; i < sentences.length; i++) {
+            tokens.push([]);
         }
 
         this.setState({
-            sentences: sentences,
-            tokens: tokens,
+            id: id,
+            tokens: tokens
         });
+
+        if (tokenizer !== {}) {
+            if (tokenizer.tokens.length >= sentences.length && tokenizer.tokens !== []) {
+                this.setState({
+                    id: id,
+                    tokens: tokenizer.tokens,
+                });
+            }
+        }
     }
+
+    // componentDidMount () {
+    //     // @TODO: Replace this with a backend function that'll retrieve the input/output text.
+    //     let sentences = [["Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı.", "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal."]
+    //         , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
+    //         , ["Bu görüntüler sosyal medyada 2 oyuncu arasında kıyaslama yapılmasına neden oldu...", "These images caused comparisons between 2 players in the social media..."]
+    //     ];
+    //
+    //     let { tokens } = this.state;
+    //     console.log(tokens);
+    //
+    //     if (tokens === [] || tokens === undefined) {
+    //         tokens = [];
+    //         for (let i = 0; i < sentences.length; i++) {
+    //             tokens.push([]);
+    //         }
+    //     }
+    //
+    //     this.setState({
+    //         sentences: sentences,
+    //         tokens: tokens,
+    //     });
+    // }
 
     previousStage () {
         let { id, sentences, tokens } = this.state;
@@ -146,7 +162,7 @@ class Tokenizer extends React.Component {
         return (
             <div>
                 <div className="center-wh">
-                    {/*<pre>{`Tokens: ${tokens}`}</pre>*/}
+                    {/*<pre>{`Sentences: ${sentences.length}\nTokens: ${JSON.stringify(tokens)}`}</pre>*/}
                     <div className="center-wv" style={{paddingTop: 100}}>
                         <button
                             onClick={this.previousStage.bind(this)}

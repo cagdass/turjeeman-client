@@ -28,13 +28,13 @@ class Project extends React.Component {
         };
     }
 
-    componentWillMount () {
+    componentDidMount () {
         let id = this.props.params.id.trim();
 
-
-        let tokenizer = appState.getTokenizer(id);
-
         let edit = appState.getEdit(id);
+        let sentencer = appState.getSentencer(id);
+        let tokenizer = appState.getTokenizer(id);
+        let mapper = appState.getMapper(id);
 
         if (edit !== {}) {
             this.setState({
@@ -47,25 +47,43 @@ class Project extends React.Component {
             });
         }
 
-        if (tokenizer !== {}) {
+        let sentences = [];
+
+        if (sentencer !== {}) {
+            sentences = sentencer.sentences;
             this.setState({
                 "id": id,
-                "tokens": tokenizer.tokens,
-                "sentences": tokenizer.sentences,
+                "sentences": sentencer.sentences,
             });
         }
-    }
 
-    componentDidMount () {
-        // @TODO: Replace this with a backend function that'll retrieve the input/output text.
+        let tokens = [];
+        for (let i = 0; i < sentences.length; i++) {
+            tokens.push([]);
+        }
+
         this.setState({
-            sentences: [["Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı.", "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal."]
-                , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
-                , ["Bu görüntüler sosyal medyada 2 oyuncu arasında kıyaslama yapılmasına neden oldu...", "These images caused comparisons between 2 players in the social media..."]
-                , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
-                , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
-            ],
-        })
+            id: id,
+            tokens: tokens
+        });
+
+        if (tokenizer !== {}) {
+            if (tokenizer.tokens.length >= sentences.length && tokenizer.tokens !== []) {
+                if (mapper !== {}) {
+                    this.setState({
+                        mappings: mapper.mappings,
+                        id: id,
+                        tokens: tokenizer.tokens,
+                    });
+                }
+                else{
+                    this.setState({
+                        id: id,
+                        tokens: tokenizer.tokens,
+                    });
+                }
+            }
+        }
     }
 
     saveMapping () {

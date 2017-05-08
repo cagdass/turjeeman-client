@@ -20,7 +20,7 @@ class Edit extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount () {
         let id = this.props.params.id.trim();
 
         let project = appState.getEdit(id);
@@ -48,8 +48,8 @@ class Edit extends React.Component {
         }
     }
 
-    handleChange (fieldName, event) {
-        let text = event.target.value;
+    handleChange (fieldName, value) {
+        let text = value
 
         this.setState({
             [fieldName]: text,
@@ -107,7 +107,6 @@ class Edit extends React.Component {
                         />
                     </h1>
                 </div>
-                {/*<pre>{`Project Title: ${projectTitle}\nInput text: ${inputText}\nOutput text: ${outputText}\nSource language: ${sourceLanguage}\nTarget language: ${targetLanguage}`}</pre>*/}
                 <div className="center-wv">
                     <div>
                         <div className="pt-select" style={{margin: 20}}>
@@ -127,19 +126,25 @@ class Edit extends React.Component {
                     </div>
                 </div>
                 <div className="center-wv">
-                    <div className="encapsulator">
-                        <textarea
-                            className="text-field pt-input pt-large "
-                            dir="auto"
+                    <div style={{marginLeft: 50, marginRight: 50, padding: 100}}>
+                        <EditableText
+                            className="limit-width"
+                            multiline minLines={3} maxLines={12}
+                            placeholder="Enter source text"
+                            selectAllOnFocus={this.state.selectAllOnFocus}
+                            value={inputText}
                             onChange={this.handleChange.bind(this, "inputText")}
-                        >{inputText}</textarea>
+                        />
                     </div>
-                    <div className="encapsulator">
-                        <textarea
-                            className="pt-input pt-large text-field"
-                            dir="auto"
+                    <div style={{marginLeft: 50, marginRight: 50, padding: 100}}>
+                        <EditableText
+                            className="limit-width"
+                            multiline minLines={3} maxLines={12}
+                            placeholder="Enter target text"
+                            selectAllOnFocus={this.state.selectAllOnFocus}
+                            value={outputText}
                             onChange={this.handleChange.bind(this, "outputText")}
-                        >{outputText}</textarea>
+                        />
                     </div>
                 </div>
                 <div style={{paddingBottom: 100, marginLeft: 100}}>

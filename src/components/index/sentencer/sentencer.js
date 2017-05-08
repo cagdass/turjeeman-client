@@ -21,7 +21,7 @@ class Sentencer extends React.Component {
         };
     }
 
-    componentWillMount () {
+    componentDidMount () {
         let id = this.props.params.id.trim();
         this.setState({id});
 
@@ -37,10 +37,7 @@ class Sentencer extends React.Component {
                 targetLanguage: edit.targetLanguage,
             });
         }
-    }
 
-    componentDidMount () {
-        // @TODO: Replace this with a backend function that'll retrieve the input/output text.
         this.setState({
             sentences: [["Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı.", "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal."]
             , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
@@ -48,6 +45,11 @@ class Sentencer extends React.Component {
             ],
         })
     }
+
+    // componentDidMount () {
+    //     // @TODO: Replace this with a backend function that'll retrieve the input/output text.
+    //
+    // }
 
     mergeSentence (index) {
         let { sentences } = this.state;
@@ -78,8 +80,6 @@ class Sentencer extends React.Component {
     }
 
     editSentence (index, index_, value) {
-        console.log(value);
-
         let { sentences } = this.state;
 
         sentences[index][index_] = value;
@@ -124,17 +124,21 @@ class Sentencer extends React.Component {
     }
 
     previousStage () {
-        let { id } = this.state;
+        let { id, sentences } = this.state;
 
         let { router } = this.context;
+
+        appState.setSentencer(id, sentences);
 
         router.push("/edit/" + id);
     }
 
     nextStage () {
-        let { id } = this.state;
+        let { id, sentences } = this.state;
 
         let { router } = this.context;
+
+        appState.setSentencer(id, sentences);
 
         router.push("/tokenizer/" + id);
     }

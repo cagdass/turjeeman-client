@@ -59,6 +59,7 @@ class NavBar extends React.Component {
                             <div className="pt-navbar-heading" style={{color: "white"}}>Turjeeman</div>
                         </Link>
                     </div>
+                    {name !== "" && surname !== "" &&
                     <div className="pt-navbar-group pt-align-right">
                         <Link to="/dashboard">
                             <button className="pt-button pt-minimal pt-icon-home" tabIndex={tabindex}><span className="no-highlight">Dashboard</span></button>
@@ -75,6 +76,7 @@ class NavBar extends React.Component {
                         </Popover>
 
                     </div>
+                    }
                 </div>
             </nav>
         );
