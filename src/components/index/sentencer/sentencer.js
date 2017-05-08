@@ -47,6 +47,24 @@ class Sentencer extends React.Component {
         })
     }
 
+    autoSentencer () {
+        let { inputText, outputText } = this.state;
+
+        fetch('mapper', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                sentence_pairs: [inputText, outputText],
+            })
+        }).then(response => {
+            let obj = response.json();
+            console.log(obj);
+        }).catch(error => console.error(error));
+    }
+
     mergeSentence (index) {
         let { sentences } = this.state;
 
@@ -170,6 +188,13 @@ class Sentencer extends React.Component {
                         Edit
                     </button>
                     <button
+                        onClick={this.autoSentencer.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save "
+                        style={{margin: 20}}>
+                        Auto sentencer
+                    </button>
+                    <button
                         onClick={this.saveProject.bind(this)}
                         type="button"
                         className="pt-button pt-intent-save"
@@ -197,6 +222,13 @@ class Sentencer extends React.Component {
                         style={{margin: 20}}>
                         <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
                         Edit
+                    </button>
+                    <button
+                        onClick={this.autoSentencer.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save "
+                        style={{margin: 20}}>
+                        Auto sentencer
                     </button>
                     <button
                         onClick={this.saveProject.bind(this)}
