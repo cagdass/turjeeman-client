@@ -16,6 +16,7 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount () {
+        // @TODO Replace with the actual backend function
         this.setState({
             projects: [
                 {
@@ -41,7 +42,7 @@ class Dashboard extends React.Component {
         let { id, title, sourceLanguage, targetLanguage, lastSaved } = project;
 
         return (
-            <Link to={`/edit/${id}`}>
+            <Link style={{color: "black"}} to={`/edit/${id}`}>
                 <ProjectListing
                     projectID={id}
                     projectTitle={title}
@@ -58,7 +59,7 @@ class Dashboard extends React.Component {
 
         return (
             <div>
-                <h1 className="center-wh">
+                <h1 className="center-wh" style={{paddingTop: 100}}>
                     Dashboard
                 </h1>
                 {projects.map(this.renderProjectListing.bind(this))}

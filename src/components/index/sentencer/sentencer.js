@@ -38,6 +38,7 @@ class Sentencer extends React.Component {
             });
         }
 
+        // @TODO: Replace this with a backend function that'll retrieve the results of the sentencer.
         this.setState({
             sentences: [["Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı.", "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal."]
             , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
@@ -45,11 +46,6 @@ class Sentencer extends React.Component {
             ],
         })
     }
-
-    // componentDidMount () {
-    //     // @TODO: Replace this with a backend function that'll retrieve the input/output text.
-    //
-    // }
 
     mergeSentence (index) {
         let { sentences } = this.state;
@@ -144,7 +140,19 @@ class Sentencer extends React.Component {
     }
 
     saveProject () {
+        // Don't know any user_ids.
+        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage, sentences } = this.state;
 
+        // The request object.
+        let request = {
+            "user_id": user_id,
+            "project_id": id,
+            "title": projectTitle,
+            "timestamp": (Math.floor(Date.now() / 1000)),
+            "source_language": sourceLanguage,
+            "target_language": targetLanguage,
+            "sentence_pairs": sentences,
+        }
     }
 
     render () {

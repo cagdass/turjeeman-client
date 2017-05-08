@@ -153,7 +153,20 @@ class Tokenizer extends React.Component {
     }
 
     saveProject () {
+        // Don't know any user_ids.
+        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage, sentences, tokens } = this.state;
 
+        // The request object.
+        let request = {
+            "user_id": user_id,
+            "project_id": id,
+            "title": projectTitle,
+            "timestamp": (Math.floor(Date.now() / 1000)),
+            "source_language": sourceLanguage,
+            "target_language": targetLanguage,
+            "sentence_pairs": sentences,
+            "tokens": tokens,
+        }
     }
 
     render () {

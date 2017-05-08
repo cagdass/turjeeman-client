@@ -73,6 +73,14 @@ class Register extends React.Component {
         if (passwordMessage === "hidden" && emailMessage === "hidden") {
             // Send request.
             let { router } = this.context;
+            let { email, password, firstName, lastName } = this.state;
+
+            let request = {
+                "email": email,
+                "password": password,
+                "firstName": firstName,
+                "lastName": lastName,
+            };
 
             router.push("/login")
         }
