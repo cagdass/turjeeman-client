@@ -169,6 +169,30 @@ class Tokenizer extends React.Component {
         }
     }
 
+    autoTokenizer () {
+        let { sentences } = this.state;
+
+        fetch('tokenizer', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                sentence_pairs: sentences
+            })
+        }).then(response => {
+            let obj = response.json();
+            // Access fields in the response object.
+
+            let tokens = obj.tokens;
+            this.setState({
+                "tokens": tokens
+            })
+
+        }).catch(error => console.error(error));
+    }
+
     render () {
         let { tokens, projectTitle, sentences = [], id, activeIndex } = this.state;
 
@@ -184,6 +208,13 @@ class Tokenizer extends React.Component {
                             style={{margin: 20}}>
                             <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
                             Sentencer
+                        </button>
+                        <button
+                            onClick={this.autoTokenizer.bind(this)}
+                            type="button"
+                            className="pt-button pt-intent-save "
+                            style={{margin: 20}}>
+                            Auto tokenizer
                         </button>
                         <button
                             onClick={this.saveProject.bind(this)}
@@ -214,6 +245,13 @@ class Tokenizer extends React.Component {
                         style={{margin: 20}}>
                         <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
                         Sentencer
+                    </button>
+                    <button
+                        onClick={this.autoTokenizer.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save "
+                        style={{margin: 20}}>
+                        Auto tokenizer
                     </button>
                     <button
                         onClick={this.saveProject.bind(this)}

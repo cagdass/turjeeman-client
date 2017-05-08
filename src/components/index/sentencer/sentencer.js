@@ -61,7 +61,13 @@ class Sentencer extends React.Component {
             })
         }).then(response => {
             let obj = response.json();
-            console.log(obj);
+            // Access fields in the response object.
+
+            let sentences = obj.sentences;
+            this.setState({
+                "sentences": sentences
+            })
+
         }).catch(error => console.error(error));
     }
 

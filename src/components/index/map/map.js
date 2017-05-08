@@ -226,6 +226,32 @@ class Project extends React.Component {
         // @TODO send request with the "request" object. Send objects in "edit.js", "tokenizer.js", "sentencer.js"
     }
 
+    autoMapper () {
+        let { sentences, tokens } = this.state;
+
+        fetch('mapper', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                sentence_pairs: sentences,
+                tokens: tokens,
+            })
+        }).then(response => {
+            let obj = response.json();
+            // Access fields in the response object.
+
+            let mappings = obj.mappings;
+            this.setState({
+                "mappings": mappings
+            })
+
+        }).catch(error => console.error(error));
+    }
+
+
     render () {
         let { inputText = "", outputText = "", sentences = [], mappings, activeColor, projectTitle } = this.state;
 
@@ -241,6 +267,13 @@ class Project extends React.Component {
                         style={{margin: 20}}>
                         <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
                         Tokenizer
+                    </button>
+                    <button
+                        onClick={this.autoMapper.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save "
+                        style={{margin: 20}}>
+                        Auto mapper
                     </button>
                     <button
                         onClick={this.saveProject.bind(this)}
@@ -269,6 +302,13 @@ class Project extends React.Component {
                         style={{margin: 20}}>
                         <span className="pt-icon-standard pt-icon-arrow-left pt-align-left" />
                         Tokenizer
+                    </button>
+                    <button
+                        onClick={this.autoMapper.bind(this)}
+                        type="button"
+                        className="pt-button pt-intent-save "
+                        style={{margin: 20}}>
+                        Auto mapper
                     </button>
                     <button
                         onClick={this.saveProject.bind(this)}
