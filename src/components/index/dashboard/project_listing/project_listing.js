@@ -1,5 +1,6 @@
 import React, { PropTypes } from "react";
 
+import "../_assets/style.css";
 import "./_assets/style.css";
 import "../../../../assets/css/style.css";
 
@@ -20,10 +21,10 @@ class ProjectListing extends React.Component {
 
         return (
             <div className="center-wv">
-                <p className="padding-20">{projectTitle}</p>
-                <p className="padding-20">{sourceLanguage}</p>
-                <p className="padding-20">{targetLanguage}</p>
-                <p className="padding-20">{lastSaved}</p>
+                <p className="table-el">{projectTitle}</p>
+                <p className="table-el">{sourceLanguage}</p>
+                <p className="table-el">{targetLanguage}</p>
+                <p className="table-el">{lastSaved}</p>
             </div>
         );
     }

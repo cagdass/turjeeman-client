@@ -35,7 +35,6 @@ class Dashboard extends React.Component {
                 },
             ],
         })
-
     }
 
     renderProjectListing (project) {
@@ -54,14 +53,38 @@ class Dashboard extends React.Component {
         );
     }
 
+    newProject () {
+        // @TODO Send request to get an id.
+
+        let retrievedID = 123;
+
+        let { router } = this.context;
+
+        router.push("/edit/" + retrievedID);
+    }
+
     render () {
         let { projects } = this.state;
 
         return (
-            <div>
-                <h1 className="center-wh" style={{paddingTop: 100}}>
+            <div className="center-wh">
+                <h1  style={{paddingTop: 100}}>
                     Dashboard
                 </h1>
+                <button
+                    onClick={this.newProject.bind(this)}
+                    type="button"
+                    className="pt-button pt-intent-success"
+                    style={{margin: 50}}>
+                    New project
+                    <span className="pt-icon-standard pt-align-right" />
+                </button>
+                <div className="center-wv">
+                    <p className="table-el">Project Title</p>
+                    <p className="table-el">Source Language</p>
+                    <p className="table-el">Target Language</p>
+                    <p className="table-el">Last Saved</p>
+                </div>
                 {projects.map(this.renderProjectListing.bind(this))}
             </div>
         );

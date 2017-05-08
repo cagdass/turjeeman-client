@@ -221,7 +221,7 @@ class Project extends React.Component {
             "sentence_pairs": sentences,
             "tokens": tokens,
             "mappings": mappings,
-        }
+        };
 
         // @TODO send request with the "request" object. Send objects in "edit.js", "tokenizer.js", "sentencer.js"
     }
