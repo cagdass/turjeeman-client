@@ -175,11 +175,13 @@ class Register extends React.Component {
                     placeholder="First Name"
                     className="pt-input"
                 />
+                <br />
                 <input
                     onChange={this.handleChange.bind(this, "lastName")}
                     placeholder="Last Name"
                     className="pt-input"
                 />
+                <br />
                 <div>
                     <div>
                         <a onClick={this.handleClick.bind(this)} role="button" className="pt-button pt-intent-primary" tabIndex={0}>Register</a>
