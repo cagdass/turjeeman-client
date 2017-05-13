@@ -148,11 +148,16 @@ class Project extends React.Component {
         let source = sentencePair[0] || "";
         let target = sentencePair[1] || "";
 
-        let { tokens = [], activeColorLiteral, activeColor } = this.state;
+        let { tokens = [], mappings = [], activeColorLiteral, activeColor } = this.state;
 
         let tokens_ = [];
         if (tokens.length > index) {
             tokens_ = tokens[index];
+        }
+
+        let mappings_ = [];
+        if (mappings.length > index) {
+            mappings_ = mappings[index];
         }
 
         return (<div className="center-wv">
@@ -163,6 +168,7 @@ class Project extends React.Component {
                 onChange={this.handleTokenChange.bind(this)}
                 index={index}
                 tokens={tokens_}
+                mappings={mappings_}
                 activeColor={activeColor}
             />
         </div>)

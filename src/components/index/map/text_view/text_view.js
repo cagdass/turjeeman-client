@@ -16,24 +16,74 @@ class TextView extends React.Component {
             "targetSelections": [],
             "selectedIndices": [],
             "tokens": [],
+            "mappings": [],
         };
     }
 
     componentWillMount () {
-        let { index, tokens = []} = this.props;
-        let { sentenceMappings } = this.state;
+        let { index, tokens = [], mappings = []} = this.props;
 
-        for (let i = 0; i < colors.length; i++) {
-            sentenceMappings.push([]);
-            sentenceMappings[i].push([]);
-            sentenceMappings[i].push([]);
+        let canAdd = true;
+
+        if (mappings.length === colors.length) {
+            for (let i = 0; i < mappings.length; i++) {
+                if (mappings[i].length !== 2) {
+                    canAdd = false;
+                }
+            }
+        }
+        else {
+            canAdd = false;
         }
 
-        this.setState({
-            "index": index,
-            "tokens": tokens,
-            "sentenceMappings": sentenceMappings,
-        })
+        if (canAdd) {
+            let sourceSelections = [];
+            let targetSelections = [];
+
+            for (let color = 0; color < mappings.length; color++) {
+                for (let i = 0; i < 2; i++) {
+                    let cur = mappings[color][i];
+
+                    for (let j = 0; j < cur.length; j++) {
+                        if (i == 0) {
+                            sourceSelections.push({
+                                "color": color,
+                                "indices": cur[j],
+                            });
+                        }
+                        else {
+                            targetSelections.push({
+                                "color": color,
+                                "indices": cur[j],
+                            });
+                        }
+                    }
+                }
+            }
+
+            this.setState({
+                "index": index,
+                "tokens": tokens,
+                "sentenceMappings": mappings,
+                "sourceSelections": sourceSelections,
+                "targetSelections": targetSelections,
+            });
+        }
+        else {
+            let { sentenceMappings } = this.state;
+
+            for (let i = 0; i < colors.length; i++) {
+                sentenceMappings.push([]);
+                sentenceMappings[i].push([]);
+                sentenceMappings[i].push([]);
+            }
+
+            this.setState({
+                "index": index,
+                "tokens": tokens,
+                "sentenceMappings": sentenceMappings,
+            });
+        }
     }
 
     handleSelect (fieldName, e) {
@@ -243,7 +293,7 @@ class TextView extends React.Component {
         return (
             <div>
                 <div>
-                    {/*<pre>{`Tokens: ${tokens}\nMappings: ${JSON.stringify(sentenceMappings)}\nactiveColor: ${activeColor}\nsourceSelections: ${JSON.stringify(sourceSelections)}\ntargetSelection: ${JSON.stringify(targetSelections)}`}</pre>*/}
+                    <pre>{`Tokens: ${tokens}\nMappings: ${JSON.stringify(sentenceMappings)}\nactiveColor: ${activeColor}\nsourceSelections: ${JSON.stringify(sourceSelections)}\ntargetSelection: ${JSON.stringify(targetSelections)}`}</pre>
                     <div className="center-wh-stretch">
                         <div className="center-wv">
                             <div className="text-area-stuff">

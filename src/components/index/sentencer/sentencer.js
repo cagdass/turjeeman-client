@@ -18,6 +18,7 @@ class Sentencer extends React.Component {
             "outputText": "",
             "sourceLanguage": "",
             "targetLanguage": "",
+            "change": false,
         };
     }
 
@@ -26,6 +27,8 @@ class Sentencer extends React.Component {
         this.setState({id});
 
         let edit = appState.getEdit(id);
+
+        let sentences = [["", ""]];
 
         if (edit !== {}) {
             this.setState({
@@ -38,13 +41,9 @@ class Sentencer extends React.Component {
             });
         }
 
-        // @TODO: Replace this with a backend function that'll retrieve the results of the sentencer.
-        this.setState({
-            sentences: [["Vodafone Arena'da belki de ligin kaderini çizecek Beşiktaş-Fenerbahçe kapışması öncesi Quaresma antrenmanda şık bir gol attı.", "Vodafone Arena, perhaps the league's destiny to draw Besiktas-Fenerbahce before the fighting Quaresma goal was a stylish goal."]
-            , ["Kasımpaşa maçının hazırlıklarını sürdüren Galatasaray'da ise Sabri Sarıoğlu yaptığı gol denemesinde başarılı olamadı.", "In preparation for the match Kasimpasa Galatasaray Sabri Sarioglu did not succeed in trying to score goals."]
-                , ["Bu görüntüler sosyal medyada 2 oyuncu arasında kıyaslama yapılmasına neden oldu...", "These images caused comparisons between 2 players in the social media..."]
-            ],
-        })
+        sentences = [["Machine learning is the subfield of computer science that gives machines the ability to learn without being explicitly programmed", "Makine ogrenmesi (yapay ogrenme) bilgisayar biliminin bir altdali olup acikca programlanmadiklari halde makinelere ogrenme yetisi verir"], [" Machine learning has close relationship to pattern recognition and artificial intelligence", " Yapay ogrenme, oruntu tanima, yapay zeka alanlariyla yakindan iliskilidir"], [" The key idea behind machine learning is to learn from data and make predictions when new data is encountered", " Yapay ogrenmenin arkasindaki anahtar nokta verilerden ogrenmek ve yeni veri ile karsilasildiginda tahminde bulunmaktir. Ne kadar cok veri, o kadar iyi demektir"], [" Machine learning algorithms learn models on the training data and the prediction accuracy of the models increase proportional to size of the training set. The more the data, the better it is", " Ayni zamanda"], [" At the same time, this field has very strong relationships to statistics, linear algebra and mathematical optimization", " bu alan istatistik, lineer cebir ve matematiksel optimizasyon konulariyla cok guclu baglantisi vardir"], [" Its robust mathematical basis gives rise to reliable algorithms that learn accurate models on the data", " Onun saglam matematiksel temelleri, veriler uzerinden tutarli modeller ogrenen guvenilir algoritmalarin ortaya cikmasini saglamaktir"], [" There are different subfields of machine learning: supervised learning, unsupervised learning, reinforcement learning, active learning etc", " Yapay ogrenmenin farkli altdallari bulunmaktadir: gozetimli ogrenme, gozetimsiz ogrenme, takviyeli ogrenme, aktif ogrenme vb"], [" Supervised learning is one of the most well-known families of learning algorithms", " Gozetimli ogrenme en cok bilinen ogrenme algoritmalari ailelerinden birisidir. Gozetimli ogrenmede, egitme verileri etiketlenmistir ve algoritmaya bu sekilde girilirler. Kara agaci ogrenmesi bir gozetimli ogrenme ornegidir"], [" In supervised learning, training data points are labeled and presented to the algorithm in that way. Decision tree learning is an example of supervised learning", " Agacin her bir nodulunde"], [" At each node of the tree, the algorithms makes a decision based on the labels or values of data points. The aim is to ask the correct question at each node. Unsupervised learning is a little bit different from supervised learning in the sense that data points are not labeled", " algoritma verilerin etiket veya degerlerine dayanarak karar alir"], [" The algorithm groups data points based on their distribution on some n-dimensional space", " Burada amac her nodulde dogru soruyu sormaktir. Gozetimsiz ogrenme ise verilerin etiketlenmemis olmasindan dolayi gozetimli ogrenmeye gore biraz daha farklidir. Algoritma, verilerin n-boyutlu uzayda dagilimlarina gore verileri gruplar"], [" Clustering algorithms can be a good example for unsupervised learning methods", " Kumeleme algoritmalari gozetimsiz ogrenme algoritmalarina iyi bir ornek olabilir"], [" Clustering algorithms group data points that resemble each other", " Kumeleme algoritmalari verileri birbirlerine benzerliklerine gore gruplar"], [" One of the key points of clustering algorithms is choosing the correct distance measure to compute how similar or dissimilar each data point is", " Kilit noktalardan bir tanesi verilerin ne kadar benzer veya farkli oldugunu olcmek icin dogru uzaklik olcusunu secmektir"], [" To find the structure in the data, one should experiment with distance measures and clustering methods depending on the characteristics of the data", " Verilerin yapisini kesfetmek icin, verilerin karasteristik ozelliklerine bagli olarak uzaklik olculeri ve kumeleme algoritmalariyla deney yapmak gereklidir"]];
+
+        this.setState({sentences});
     }
 
     autoSentencer () {
@@ -86,7 +85,8 @@ class Sentencer extends React.Component {
             sentences = [...sentences.slice(0, index), [s0, t0], ...sentences.slice(index + 2)];
 
             this.setState({
-                sentences
+                "sentences": sentences,
+                "change": true,
             });
         }
     }
@@ -96,7 +96,10 @@ class Sentencer extends React.Component {
 
         sentences = [...sentences.slice(0, index), ["", ""], ...sentences.slice(index)];
 
-        this.setState({sentences});
+        this.setState({
+            "sentences": sentences,
+            "change": true,
+        });
     }
 
     editSentence (index, index_, value) {
@@ -105,11 +108,15 @@ class Sentencer extends React.Component {
         sentences[index][index_] = value;
 
         this.setState({
-            sentences
+            "sentences": sentences,
+            "change": true,
         });
     }
 
     renderSentencePair (sentencePair, index) {
+        console.log("Hola");
+        console.log(sentencePair);
+
         return (<div className="center-wv padding-left-10p">
             <div className="padding-20 wh">
                 <span
@@ -123,7 +130,7 @@ class Sentencer extends React.Component {
             </div>
             <div className="padding-10 limit-width">
                 <EditableText
-                    multiline minLines={3} maxLines={12}
+                    multiline minLines={3} maxLines={1000}
                     placeholder="Enter a sentence"
                     selectAllOnFocus={this.state.selectAllOnFocus}
                     value={sentencePair[0]}
@@ -132,7 +139,7 @@ class Sentencer extends React.Component {
             </div>
             <div className="padding-10 limit-width">
                 <EditableText
-                    multiline minLines={3} maxLines={12}
+                    multiline minLines={3} maxLines={1000}
                     placeholder="Enter a sentence"
                     selectAllOnFocus={this.state.selectAllOnFocus}
                     value={sentencePair[1]}
@@ -144,21 +151,35 @@ class Sentencer extends React.Component {
     }
 
     previousStage () {
-        let { id, sentences } = this.state;
+        let { id, sentences, change } = this.state;
 
         let { router } = this.context;
 
         appState.setSentencer(id, sentences);
+
+        if (change) {
+            let tokens = [];
+            let mappings = [];
+            appState.setMapper(id, mappings);
+            appState.setTokenizer(id, sentences, tokens);
+        }
 
         router.push("/edit/" + id);
     }
 
     nextStage () {
-        let { id, sentences } = this.state;
+        let { id, sentences, change } = this.state;
 
         let { router } = this.context;
 
         appState.setSentencer(id, sentences);
+
+        if (change) {
+            let tokens = [];
+            let mappings = [];
+            appState.setMapper(id, mappings);
+            appState.setTokenizer(id, sentences, tokens);
+        }
 
         router.push("/tokenizer/" + id);
     }

@@ -20,6 +20,7 @@ class Tokenizer extends React.Component {
             "outputText": "",
             "sourceLanguage": "",
             "targetLanguage": "",
+            "change": false,
         };
     }
 
@@ -95,21 +96,31 @@ class Tokenizer extends React.Component {
     // }
 
     previousStage () {
-        let { id, sentences, tokens } = this.state;
+        let { id, sentences, tokens, change } = this.state;
 
         let { router } = this.context;
 
         appState.setTokenizer(id, sentences, tokens);
+
+        if (change) {
+            let mappings = [];
+            appState.setMapper(id, mappings);
+        }
 
         router.push("/sentencer/" + id);
     }
 
     nextStage () {
-        let { id, sentences, tokens } = this.state;
+        let { id, sentences, tokens, change } = this.state;
 
         let { router } = this.context;
 
         appState.setTokenizer(id, sentences, tokens);
+
+        if (change) {
+            let mappings = [];
+            appState.setMapper(id, mappings);
+        }
 
         router.push("/map/" + id);
     }
@@ -119,7 +130,10 @@ class Tokenizer extends React.Component {
 
         tokens[index] = [sourceSelections, targetSelections];
 
-        this.setState({tokens});
+        this.setState({
+            "tokens": tokens,
+            "change": true,
+        });
     }
 
     changeActiveIndex (index) {

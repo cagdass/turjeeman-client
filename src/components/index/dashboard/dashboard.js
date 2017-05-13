@@ -21,17 +21,17 @@ class Dashboard extends React.Component {
             projects: [
                 {
                     id: 1,
-                    title: "Baraa Stuff",
-                    sourceLanguage: "AR",
-                    targetLanguage: "TR",
-                    lastSaved: "23/07/2016",
+                    title: "Machine Learning",
+                    sourceLanguage: "English",
+                    targetLanguage: "Turkish",
+                    lastSaved: "23/04/2017",
                 },
                 {
                     id: 2,
                     title: "Homo Baraaus",
-                    sourceLanguage: "EN",
-                    targetLanguage: "TR",
-                    lastSaved: "19/05/2017",
+                    sourceLanguage: "Turkish",
+                    targetLanguage: "English",
+                    lastSaved: "2/05/2017",
                 },
             ],
         })
