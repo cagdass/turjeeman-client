@@ -216,7 +216,7 @@ class Tokenizer extends React.Component {
         return (
             <div>
                 <div className="center-wh">
-                    {/*<pre>{`Sentences: ${sentences.length}\nTokens: ${JSON.stringify(tokens)}`}</pre>*/}
+                    <pre>{`Sentences: ${sentences.length}\nTokens: ${JSON.stringify(tokens)}`}</pre>
                     <div className="center-wv" style={{paddingTop: 100}}>
                         <button
                             onClick={this.previousStage.bind(this)}
