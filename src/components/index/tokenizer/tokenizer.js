@@ -184,7 +184,7 @@ class Tokenizer extends React.Component {
     }
 
     autoTokenizer () {
-        let { sentences } = this.state;
+        let { sentences, sourceLanguage, targetLanguage } = this.state;
 
         fetch('tokenizer', {
             method: 'POST',
@@ -193,7 +193,9 @@ class Tokenizer extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                sentence_pairs: sentences
+                sentence_pairs: sentences,
+                source_language: sourceLanguage,
+                target_language: targetLanguage,
             })
         }).then(response => {
             let obj = response.json();
@@ -202,8 +204,9 @@ class Tokenizer extends React.Component {
             let tokens = obj.tokens;
             this.setState({
                 "tokens": tokens
-            })
+            });
 
+            appState.setTokenizer(id, sentences, tokens);
         }).catch(error => console.error(error));
     }
 

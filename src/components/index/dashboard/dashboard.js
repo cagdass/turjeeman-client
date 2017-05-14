@@ -7,6 +7,8 @@ import ProjectListing from "./project_listing/project_listing";
 
 import "./_assets/style.css";
 
+import appState from "../../../utility/app_state";
+
 class Dashboard extends React.Component {
     constructor (props, context, ...args) {
         super(props, context, ...args);
@@ -17,24 +19,71 @@ class Dashboard extends React.Component {
 
     componentDidMount () {
         // @TODO Replace with the actual backend function
-        this.setState({
-            projects: [
-                {
-                    id: 1,
-                    title: "Machine Learning",
-                    sourceLanguage: "English",
-                    targetLanguage: "Turkish",
-                    lastSaved: "23/04/2017",
-                },
-                {
-                    id: 2,
-                    title: "Homo Baraaus",
-                    sourceLanguage: "Turkish",
-                    targetLanguage: "English",
-                    lastSaved: "2/05/2017",
-                },
-            ],
-        })
+        // this.setState({
+        //     projects: [
+        //         {
+        //             id: 1,
+        //             title: "Machine Learning",
+        //             sourceLanguage: "English",
+        //             targetLanguage: "Turkish",
+        //             lastSaved: "23/04/2017",
+        //         },
+        //         {
+        //             id: 2,
+        //             title: "Homo Baraaus",
+        //             sourceLanguage: "Turkish",
+        //             targetLanguage: "English",
+        //             lastSaved: "2/05/2017",
+        //         },
+        //     ],
+        // })
+
+        let user = appState.getUser();
+
+        fetch('storage', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: user.username,
+                status: "fetch",
+            })
+        }).then(response => {
+            let obj = response.json();
+
+            let projects_ = [];
+            let projects = obj.projects;
+
+            for (let i = 0; i < projects.length; i++) {
+                let project = projects[i];
+
+                let project_ = {
+                    user_id: project.user_id,
+                    id: project.project_id,
+                    title: project.title,
+                    lastSaved: project.timestamp,
+                    sourceLanguage: project.source_language,
+                    targetLanguage: project.target_language,
+                    sentences: project.sentence_pairs,
+                    tokens: project.tokens,
+                    mappings: project.mappings,
+                };
+
+                let id = project.project_id;
+                appState.setEdit(id, project.sentence_pairs[0], project.sentence_pairs[1], project.source_language, project.target_language, project.title);
+                appState.setSentencer(id, project.sentence_pairs);
+                appState.setTokenizer(id, project.sentence_pairs, project.tokens);
+                appState.setMapper(id, project.mappings);
+
+                projects_.push(project_);
+            }
+
+            this.setState({
+                projects: projects_,
+            });
+        }).catch(error => console.error(error));
     }
 
     renderProjectListing (project) {
@@ -54,13 +103,24 @@ class Dashboard extends React.Component {
     }
 
     newProject () {
-        // @TODO Send request to get an id.
-
-        let retrievedID = 123;
-
+        let user = appState.getUser();
         let { router } = this.context;
 
-        router.push("/edit/" + retrievedID);
+        fetch('storage', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: user.username,
+                status: "create",
+            })
+        }).then(response => {
+            let obj = response.json();
+            let id = obj.id;
+            router.push("/edit/" + id);
+        }).catch(error => console.error(error));
     }
 
     render () {

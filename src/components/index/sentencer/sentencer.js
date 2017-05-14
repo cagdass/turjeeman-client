@@ -47,9 +47,9 @@ class Sentencer extends React.Component {
     }
 
     autoSentencer () {
-        let { inputText, outputText } = this.state;
+        let { inputText, outputText, sourceLanguage, targetLanguage } = this.state;
 
-        fetch('mapper', {
+        fetch('sentencer', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -57,16 +57,18 @@ class Sentencer extends React.Component {
             },
             body: JSON.stringify({
                 sentence_pairs: [inputText, outputText],
+                source_language: sourceLanguage,
+                target_language: targetLanguage,
             })
         }).then(response => {
             let obj = response.json();
             // Access fields in the response object.
 
-            let sentences = obj.sentences;
+            let sentences = obj.sentence_pairs;
             this.setState({
                 "sentences": sentences
-            })
-
+            });
+            appState.setSentencer(id, sentences);
         }).catch(error => console.error(error));
     }
 

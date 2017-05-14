@@ -214,26 +214,43 @@ class Project extends React.Component {
 
     saveProject () {
         // Don't know any user_ids.
-        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage, sentences, tokens, mappings } = this.state;
+        let { projectTitle, id, user_id = "12345", sourceLanguage, targetLanguage, sentences, mappings } = this.state;
 
-        // The request object.
-        let request = {
-            "user_id": user_id,
-            "project_id": id,
-            "title": projectTitle,
-            "timestamp": (Math.floor(Date.now() / 1000)),
-            "source_language": sourceLanguage,
-            "target_language": targetLanguage,
-            "sentence_pairs": sentences,
-            "tokens": tokens,
-            "mappings": mappings,
-        };
+        // // The request object.
+        // let request = {
+        //     "user_id": user_id,
+        //     "project_id": id,
+        //     "title": projectTitle,
+        //     "timestamp": (Math.floor(Date.now() / 1000)),
+        //     "source_language": sourceLanguage,
+        //     "target_language": targetLanguage,
+        //     "sentence_pairs": sentences,
+        //     "tokens": tokens,
+        //     "mappings": mappings,
+        // };
+        //
+        // // @TODO send request with the "request" object. Send objects in "edit.js", "tokenizer.js", "sentencer.js"
 
-        // @TODO send request with the "request" object. Send objects in "edit.js", "tokenizer.js", "sentencer.js"
+        let status = "save_map";
+
+        fetch('mapper', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                sentence_pairs: sentences,
+                mappings: mappings,
+                source_language: sourceLanguage,
+                target_language: targetLanguage,
+                status: status,
+            })
+        }).catch(error => console.error(error));
     }
 
     autoMapper () {
-        let { sentences, tokens } = this.state;
+        let { id, sentences, tokens, sourceLanguage, targetLanguage, status = "auto_map"} = this.state;
 
         fetch('mapper', {
             method: 'POST',
@@ -244,16 +261,19 @@ class Project extends React.Component {
             body: JSON.stringify({
                 sentence_pairs: sentences,
                 tokens: tokens,
+                source_language: sourceLanguage,
+                target_language: targetLanguage,
+                status: status,
             })
         }).then(response => {
             let obj = response.json();
-            // Access fields in the response object.
 
             let mappings = obj.mappings;
             this.setState({
                 "mappings": mappings
-            })
+            });
 
+            appState.setMapper(id, mappings);
         }).catch(error => console.error(error));
     }
 

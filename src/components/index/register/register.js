@@ -68,7 +68,7 @@ class Register extends React.Component {
     }
 
     handleClick () {
-        let { passwordMessage, emailMessage } = this.state;
+        let { passwordMessage, emailMessage, email, password, firstName, lastName } = this.state;
 
         if (passwordMessage === "hidden" && emailMessage === "hidden") {
             // Send request.
@@ -82,7 +82,24 @@ class Register extends React.Component {
                 "lastName": lastName,
             };
 
-            router.push("/login")
+            fetch('auth/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: email,
+                    password: password,
+                    name: firstName + lastName,
+                })
+            })
+            .then((resp) => resp.json()) // Transform the data into json
+            .then(data => {
+                console.log(data);
+                router.push("/login");
+            })
+            .catch(error => console.log(error));
         }
     }
 
