@@ -25,6 +25,12 @@ class TextView extends React.Component {
 
         let canAdd = true;
 
+        if (mappings.length < colors.length) {
+            for (let i = 0; i < colors.length - mappings.length; i++) {
+                mappings.push([[],[]]);
+            }
+        }
+
         // if (mappings.length === colors.length) {
             for (let i = 0; i < mappings.length; i++) {
                 if (mappings[i].length !== 2) {
@@ -39,12 +45,14 @@ class TextView extends React.Component {
         if (canAdd) {
             let sourceSelections = [];
             let targetSelections = [];
+            // let sentenceMappings = [];
 
             for (let color = 0; color < mappings.length; color++) {
                 for (let i = 0; i < 2; i++) {
                     let cur = mappings[color][i];
 
                     for (let j = 0; j < cur.length; j++) {
+
                         if (i == 0) {
                             sourceSelections.push({
                                 "color": color % colors.length,
@@ -53,7 +61,7 @@ class TextView extends React.Component {
                         }
                         else {
                             targetSelections.push({
-                                "color": colo % colors.length,
+                                "color": color % colors.length,
                                 "indices": cur[j],
                             });
                         }
