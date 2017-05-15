@@ -58,13 +58,16 @@ class Project extends React.Component {
         }
 
         let tokens = [];
+        let mappings = [];
         for (let i = 0; i < sentences.length; i++) {
             tokens.push([]);
+            mappings.push([[],[]]);
         }
 
         this.setState({
             id: id,
-            tokens: tokens
+            tokens: tokens,
+            mappings: mappings,
         });
 
         if (tokenizer !== {}) {

@@ -25,16 +25,16 @@ class TextView extends React.Component {
 
         let canAdd = true;
 
-        if (mappings.length === colors.length) {
+        // if (mappings.length === colors.length) {
             for (let i = 0; i < mappings.length; i++) {
                 if (mappings[i].length !== 2) {
                     canAdd = false;
                 }
             }
-        }
-        else {
-            canAdd = false;
-        }
+        // }
+        // else {
+        //     canAdd = false;
+        // }
 
         if (canAdd) {
             let sourceSelections = [];
@@ -47,13 +47,13 @@ class TextView extends React.Component {
                     for (let j = 0; j < cur.length; j++) {
                         if (i == 0) {
                             sourceSelections.push({
-                                "color": color,
+                                "color": color % colors.length,
                                 "indices": cur[j],
                             });
                         }
                         else {
                             targetSelections.push({
-                                "color": color,
+                                "color": colo % colors.length,
                                 "indices": cur[j],
                             });
                         }
